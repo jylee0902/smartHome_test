@@ -1,0 +1,1241 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<title>이용 약관 - Smart[Home]</title>
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/smarthomeui.css">
+<script type="text/javascript" src="../js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="../js/smarthomeui.js"></script>
+<script type="text/javascript" src="../js/popUpProcess.js"></script>
+<script id="dialog-template-video" type="text/x-dialog-template">
+	<div class="dialog dialog-video">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<iframe class="video-viewer" src="https://www.youtube.com/embed/QWNvC0GytDY?autoplay=1" allowfullscreen></iframe>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-find-id-form" type="text/x-dialog-template">
+	<div class="dialog dialog-find-id-form">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">아이디 / 비밀번호 찾기</p>
+		</div>
+		<div class="dialog-body">
+			<ul class="tabs h-bar">
+				<li class="tab h-item"><button type="button" class="bt-find-id" disabled>아이디 찾기</button></li>
+				<li class="tab h-item"><button type="button" class="bt-find-password">비밀번호 찾기</button></li>
+			</ul>
+			<div class="dialog-content-panel">
+				<p class="description">
+					휴대폰 번호를 입력하신 후 다음 버튼을 누르시면,<br>
+					인증번호가 전송됩니다.
+				</p>
+			</div>
+			<form>
+				<fieldset>
+					<legend>인증번호 요청</legend>
+					<div class="dialog-content-panel">
+						<div class="field field-auth-number">
+							<input type="text" class="edit" placeholder="휴대폰 번호(-제외)">
+							<input type="submit" class="bt-send-number" value="인증번호 전송">
+							<p class="err-msg"></p>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<form>
+				<fieldset>
+					<legend>인증번호 전송</legend>
+					<div class="dialog-content-panel">
+						<div class="field">
+							<input type="text" class="edit" placeholder="인증번호 6자리">
+							<p class="err-msg"></p>
+							<p class="remained-time">남은 시간 <strong>00:00</strong></p>
+						</div>
+					</div>
+					<div class="dialog-control-panel">
+						<button type="submit" class="bt-confirm">확인</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-find-id-success" type="text/x-dialog-template">
+	<div class="dialog dialog-find-id-success">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">아이디 / 비밀번호 찾기</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<p class="result"><strong>회원님의 아이디는 아래와 같습니다.</strong></p>
+				<ul class="ids"></ul>
+			</div>
+			<div class="dialog-control-panel">
+				<button type="button" class="bt-find-password">비밀번호 찾기</button>
+				<button type="button" class="bt-log-in">로그인 하기</button>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-find-id-failure" type="text/x-dialog-template">
+	<div class="dialog dialog-find-id-failure">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">회원 탈퇴</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<p class="result">
+					<strong>입력하신 휴대폰 번호에 해당하는<br>아이디를 찾을 수 없습니다.</strong>
+				</p>
+			</div>
+			<div class="dialog-control-panel">
+				<button type="button" class="bt-find-password">비밀번호 찾기</button>
+				<button type="button" class="bt-retry-find-id">확인</button>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-find-password-form" type="text/x-dialog-template">
+	<div class="dialog dialog-find-password-form">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">아이디 / 비밀번호 찾기</p>
+		</div>
+		<div class="dialog-body">
+			<ul class="tabs h-bar">
+				<li class="tab h-item"><button type="button" class="bt-find-id">아이디 찾기</button></li>
+				<li class="tab h-item"><button type="button" class="bt-find-password" disabled>비밀번호 찾기</button></li>
+			</ul>
+			<div class="dialog-content-panel dialog-content-wide">
+				<p class="description">
+					회원정보에 등록된 아이디 휴대폰 번호 입력을 통해 본인 확인 후<br>
+					임시 비밀번호를 발급 받으실 수 있습니다.
+				</p>
+			</div>
+			<form>
+				<fieldset>
+					<legend>인증번호 요청</legend>
+					<div class="dialog-content-panel">
+						<div class="field">
+							<input type="text" class="edit" placeholder="아이디(이메일)">
+							<p class="err-msg"></p>
+						</div>
+						<div class="field field-auth-number">
+							<input type="text" class="edit" placeholder="휴대폰 번호(-제외)">
+							<input type="submit" class="bt-send-number" value="인증번호 전송">
+							<p class="err-msg"></p>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<form>
+				<fieldset>
+					<legend>인증번호 전송</legend>
+					<div class="dialog-content-panel">
+						<div class="field">
+							<input type="text" class="edit" placeholder="인증번호 6자리">
+							<p class="err-msg"></p>
+							<p class="remained-time">남은 시간 <strong>00:00</strong></p>
+						</div>
+					</div>
+					<div class="dialog-control-panel">
+						<button type="submit" class="bt-confirm">확인</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-find-password-success" type="text/x-dialog-template">
+	<div class="dialog dialog-find-password-success">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">임시 비밀번호 발송 완료</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel dialog-content-wide">
+				<p class="result">
+					임시 비밀번호를 아래의 메일 주소로 발송하였습니다.
+					<strong>sarthome124@smart.com</strong>
+				</p>
+			</div>
+			<div class="dialog-control-panel">
+				<button type="button" class="bt-confirm">확인</button>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-sign-up-step1" type="text/x-dialog-template">
+	<div class="dialog dialog-sign-up-step1">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">회원 가입</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<div class="sign-up-progress">약관 동의</div>
+			</div>
+			<div class="dialog-content-panel dialog-content-wide">
+				<p class="description">서비스 이용 약관과 개인정보 수집 및 이용에 동의가 필요합니다.</p>
+			</div>
+			<form>
+				<fieldset>
+					<legend>약관동의</legend>
+					<ul class="dialog-content-panel dialog-terms-list">
+						<li class="field">
+							<input id="agree-service" type="checkbox" value="1">
+							<label for="agree-service">서비스 이용 약관 동의</label>
+							<a class="bt-show-term" href="terms-and-conditions.html#service" target="_blank">전문보기</a>
+						</li>
+						<li class="field">
+							<input id="agree-geolocation" type="checkbox" value="1">
+							<label for="agree-geolocation">개인위치정보 수집 이용 및 위치기반서비스 이용 동의</label>
+							<a class="bt-show-term" href="terms-and-conditions.html#geolocation" target="_blank">전문보기</a>
+						</li>
+						<li class="field">
+							<input id="agree-privacy" type="checkbox" value="1">
+							<label for="agree-privacy">개인정보 수집 및 이용 동의</label>
+							<a class="bt-show-term" href="terms-and-conditions.html#privacy" target="_blank">전문보기</a>
+						</li>
+						<li class="field">
+							<input id="agree-children" type="checkbox" value="1">
+							<label for="agree-children">만 14세 이상 서비스 이용 동의</label>
+							<a class="bt-show-term" href="terms-and-conditions.html#age14" target="_blank">전문보기</a>
+						</li>
+						<li class="field">
+							<input id="agree-all" type="checkbox" value="1">
+							<label for="agree-all">위의 약관에 전체 동의</label>
+						</li>
+					</ul>
+					<div class="dialog-control-panel">
+						<button type="submit" class="bt-next">다음</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-sign-up-step2" type="text/x-dialog-template">
+	<div class="dialog dialog-sign-up-step2">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">회원 가입</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<div class="sign-up-progress">본인 인증</div>
+			</div>
+			<div class="dialog-content-panel dialog-content-wide">
+				<p class="description">휴대폰 번호를 입력하신 후 인증번호 전송 버튼을 눌러 주세요.</p>
+			</div>
+			<form>
+				<fieldset>
+					<legend>인증번호 요청</legend>
+					<div class="dialog-content-panel">
+						<div class="field field-auth-number">
+							<input type="text" class="edit" placeholder="휴대폰 번호(-제외)">
+							<input type="submit" class="bt-send-number" value="인증번호 전송">
+							<p class="err-msg"></p>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<form>
+				<fieldset>
+					<legend>인증번호 전송</legend>
+					<div class="dialog-content-panel">
+						<div class="field">
+							<input type="text" class="edit" placeholder="인증번호 6자리">
+							<p class="err-msg"></p>
+							<p class="remained-time">남은 시간 <strong>00:00</strong></p>
+						</div>
+					</div>
+					<div class="dialog-control-panel">
+						<button type="button" class="bt-prev">이전</button>
+						<button type="submit" class="bt-next">다음</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-sign-up-step3" type="text/x-dialog-template">
+	<div class="dialog dialog-sign-up-step3">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">회원 가입</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<div class="sign-up-progress">정보 입력</div>
+				<p class="description">사용자 정보를 입력해주세요.</p>
+			</div>
+			<form>
+				<fieldset>
+					<legend>사용자 정보</legend>
+					<div class="dialog-content-panel">
+						<div class="dialog-content-panel">
+							<div class="field">
+								<input type="text" class="edit" placeholder="이름 (한글, 영문, 12자 이내)">
+								<p class="err-msg"></p>
+							</div>
+							<div class="field">
+								<input type="text" class="edit" placeholder="사용할 아이디 (이메일)">
+								<p class="err-msg"></p>
+							</div>
+							<div class="field">
+								<input type="password" class="edit" placeholder="비밀번호 (대소문자 구분 영문, 숫자 포함 8자 이상)">
+								<p class="err-msg"></p>
+							</div>
+							<div class="field">
+								<input type="password" class="edit" placeholder="비밀번호 재입력">
+								<p class="err-msg"></p>
+							</div>
+						</div>
+					</div>
+					<div class="dialog-control-panel">
+						<button type="button" class="bt-prev">이전</button>
+						<button type="submit" class="bt-next">다음</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-sign-up-success" type="text/x-dialog-template">
+	<div class="dialog dialog-sign-up-success">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">회원 가입 완료</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<p class="result">
+					<strong>회원 가입이 완료 되었습니다.</strong><br>
+					스마트한 우리집을 경험해보세요.
+				</p>
+			</div>
+			<div class="dialog-control-panel">
+				<button type="button" class="bt-confirm">확인</button>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-log-in" type="text/x-dialog-template">
+	<div class="dialog dialog-log-in">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-body">
+			<div class="dialog-content-panel dialog-content-wide">
+				<p class="description">
+					당신의 집이 더 스마트해지도록 로그인을 해주세요
+				</p>
+			</div>
+			<form>
+				<fieldset>
+					<legend>로그인</legend>
+					<div class="dialog-content-panel">
+						<div class="field">
+							<input type="text" class="edit" placeholder="스마트홈 계정 (이메일)">
+							<p class="err-msg"></p>
+						</div>
+						<div class="field">
+							<input type="password" class="edit" placeholder="비밀번호">
+							<p class="err-msg"></p>
+						</div>
+					</div>
+					<div class="dialog-control-panel">
+						<button type="submit" class="bt-log-in">확인</button>
+					</div>
+				</fieldset>
+			</form>
+			<div class="dialog-content-panel dialog-content-bottom">
+				<button type="button" class="bt-sign-up">회원가입</button>
+				<span class="dialog-log-in-separator"></span>
+				<button type="button" class="bt-find-id-and-password">아이디/비밀번호 찾기</button>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-inquiry" type="text/x-dialog-template">
+	<div class="dialog dialog-inquiry">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">이메일 문의</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<p class="description">
+					이용하시면서 불편한 상황이나 개선점이 있다면 Smart[Home] 고객센터로<br>
+					언제든지 알려주세요. 이메일을 함께 남겨주시면, 답변을 받아 보실 수 있습니다.
+				</p>
+			</div>
+			<form>
+				<fieldset>
+					<legend>이메일 문의</legend>
+					<div class="dialog-content-panel">
+						<div class="field h-bar">
+							<label for="inquirer-email" class="h-item">연락받으실 이메일 주소</label>
+							<div class="sub-field h-item">
+								<input id="inquirer-email" class="edit" type="text" placeholder="이메일을 입력해주세요">
+								<p class="err-msg"></p>
+							</div>
+						</div>
+						<div class="field h-bar">
+							<label for="inquirer-phone" class="h-item">연락받으실 전화번호</label>
+							<div class="sub-field h-item">
+								<input id="inquirer-phone" class="edit" type="text" placeholder="연락 받을 전화번호를 입력해주세요">
+								<p class="err-msg"></p>
+							</div>
+						</div>
+						<div class="field field-text h-bar">
+							<label for="inquiry-text" class="h-item">문의하실 내용</label>
+							<div class="sub-field h-item">
+								<textarea id="inquiry-text" class="edit text" ></textarea>
+								<p class="err-msg"></p>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend>개인정보 수집동의</legend>
+					<div class="dialog-content-panel">
+						<div class="field field-conditions">
+							<ol class="conditions">
+								<li class="condition">
+									<p>1. 수집하는 개인정보의 항목 및 수집방법</p>
+									<ol class="subconditions">
+										<li class="subcondition">
+											<p>
+												1) Smart[Home]은 이용자의 원활한 고객상담 및 불만처리 등을 위해 아래와 같은<br>
+												개인정보를 수집하고 있습니다.
+											</p>
+											<ul class="subsubconditions">
+												<li class="subsubcondition">
+													<p>- 필수정보: 이메일, 휴대폰번호</p>
+												</li>
+											</ul>
+										</li>
+									</ol>
+								</li>
+							</ol>
+						</div>
+						<div class="field field-agree">
+							<input id="agree-privacy-for-inquiry" type="checkbox" value="1">
+							<label for="agree-privacy-for-inquiry">동의합니다.</label>
+						</div>
+					</div>
+				</fieldset>
+				<div class="dialog-control-panel">
+					<button type="submit" class="bt-confirm">확인</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-change-password" type="text/x-dialog-template">
+	<div class="dialog dialog-change-password">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">비밀번호 변경</p>
+		</div>
+		<div class="dialog-body">
+			<form>
+				<fieldset class="current-password-fieldset">
+					<legend class="displayed">현재 비밀번호</legend>
+					<div class="dialog-content-panel">
+						<div class="field">
+							<input type="password" class="edit" placeholder="현재 비밀번호">
+							<p class="err-msg"></p>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="new-password-fieldset">
+					<legend class="displayed">새 비밀번호</legend>
+					<div class="dialog-content-panel">
+						<div class="field">
+							<input type="password" class="edit" placeholder="새 비밀번호 (대소문자 구분 영문, 숫자 포함 8자 이상)">
+							<p class="err-msg"></p>
+						</div>
+						<div class="field">
+							<input type="password" class="edit" placeholder="비밀번호 재입력">
+							<p class="err-msg"></p>
+						</div>
+					</div>
+				</fieldset>
+				<div class="dialog-control-panel">
+					<button type="button" class="bt-cancel">취소</button>
+					<button type="submit" class="bt-save">저장</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-withdraw-confirm" type="text/x-dialog-template">
+	<div class="dialog dialog-withdraw-confirm">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">회원 탈퇴</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<p class="description">
+					<strong>탈퇴하시겠습니까?</strong>
+				</p>
+			</div>
+			<div class="dialog-control-panel">
+				<button type="button" class="bt-cancel">취소</button>
+				<button type="button" class="bt-confirm">확인</button>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-withdraw-success" type="text/x-dialog-template">
+	<div class="dialog dialog-withdraw-success">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">회원 탈퇴 완료</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<p class="result">
+					<strong>회원탈퇴가 완료되었습니다.</strong><br>
+					더 좋아진 Smart[Home]으로 다시 만나요.
+				</p>
+			</div>
+			<div class="dialog-control-panel">
+				<button type="button" class="bt-confirm">확인</button>
+			</div>
+		</div>
+	</div>
+</script>
+<script type="text/javascript">
+/*
+	jQuery(function($) {
+		// home과 겹치는 부분은 home.html을 참고바랍니다.
+		var U = SmartHomeUI.init();
+
+		// home과 겹치는 부분 시작
+		$('.bt-sign-up').on('click', function() {
+			signUp(true);
+		});
+
+		function signUp() {
+
+			// 회원가입을 시작합니다.
+			goStep1();
+
+			function goStep1() {
+				U.dialog({
+					templateId: 'dialog-template-sign-up-step1',
+					onOpen: function(context) {
+						$(context).find('form').first().on('submit', function() {
+							goStep2();
+							return false;
+						});
+					},
+					onClose: function(context, finish) {
+						finish();
+					}
+				});
+			}
+
+			function goStep2() {
+				U.dialog({
+					templateId: 'dialog-template-sign-up-step2',
+					onOpen: function(context) {
+						var $context = $(context);
+						var $form = $context.find('form').last().on('submit', function() {
+							goStep3();
+							return false;
+						});
+						setTimeout(function() {
+							U.invalidate($form.find('input').first(), '테스트 에러 메시지');
+							setTimeout(function() {
+								U.invalidate($form.find('input').first());
+							}, 1500);
+						}, 1500);
+						$context.find('.bt-prev').on('click', function() {
+							goStep1();
+							return false;
+						});
+					}
+				});
+			}
+
+			function goStep3() {
+				U.dialog({
+					templateId: 'dialog-template-sign-up-step3',
+					onOpen: function(context) {
+						var $context = $(context);
+						$context.find('form').last().on('submit', function() {
+							goFinish();
+							return false;
+						});
+
+						$context.find('.bt-prev').on('click', function() {
+							goStep2();
+							return false;
+						});
+					}
+				});
+			}
+
+			function goFinish() {
+				U.dialog({
+					templateId: 'dialog-template-sign-up-success',
+					onOpen: function(context) {
+						$(context).find('.bt-confirm').on('click', function() {
+							U.dialog();
+							return false;
+						});
+					},
+					onClose: function(context, finish) {
+						finish();
+					}
+				});
+			}
+
+			return false;
+		}
+
+		$('.bt-log-in').on('click', login);
+
+		function login() {
+			U.dialog({
+				templateId: 'dialog-template-log-in',
+				onOpen: function(context) {
+					var $context = $(context);
+
+					$context.find('.bt-sign-up').on('click', function() {
+						signUp(true);
+					});
+
+					$context.find('.bt-find-id-and-password').on('click', function() {
+						findIdOrPassword('id');
+					});
+				}
+			});
+		}
+
+		function findIdOrPassword(target) {
+
+			switch (target) {
+			case 'id':
+				U.dialog({
+					templateId: 'dialog-template-find-id-form',
+					onOpen: function(context) {
+						var $context = $(context);
+
+						$context.find('.bt-find-password').on('click', function() {
+							findIdOrPassword('password');
+						});
+
+						$context.find('form').last().on('submit', function() {
+							U.dialog({
+								templateId: 'dialog-template-find-id-success',
+								onOpen: function(context) {
+									var $context = $(context);
+
+									// 서버로부터 가져온 email 목록을 추가합니다.
+									var results = [
+										'aaaa@bbbbb.com',
+										'cccc@ddddd.com',
+										'eeee@fffff.com',
+										'gggg@hhhhh.com',
+										'iiii@jjjjj.com'
+									];
+
+									results = $.map(results, function(v) {
+										return '<li>' + v + '</li>';
+									});
+
+									$context.find('.ids').html(results.join(''));
+									//-- END
+
+									$context.find('.bt-find-password').on('click', function() {
+										findIdOrPassword('password');
+									});
+
+									$context.find('.bt-log-in').on('click', login);
+								}
+							});
+						});
+					}
+				});
+				break;
+			case 'password':
+				U.dialog({
+					templateId: 'dialog-template-find-password-form',
+					onOpen: function(context) {
+						var $context = $(context);
+
+						$context.find('.bt-find-id').on('click', function() {
+							findIdOrPassword('id');
+						});
+
+						$context.find('form').last().on('submit', function() {
+							U.dialog({
+								templateId: 'dialog-template-find-password-success',
+								onOpen: function(context) {
+									var $context = $(context);
+
+									$context.find('.bt-confirm').on('click', function() {
+										U.dialog();
+									});
+								}
+							})
+						});
+					}
+				});
+				break;
+			default:
+				// NO DEFAULT
+			}
+		}
+		//-- home과 겹치는 부분 종료
+	});
+*/
+</script>
+
+</head>
+<body>
+<header id="gnb-holder">
+	<div id="gnb">
+		<div class="menu-field h-bar">
+			<a class="logo h-item" href="home.html">Smart[Home]</a>
+			<ul class="menus h-item h-bar">
+				<li class="menu h-item"><a class="bt-products-and-services" href="products-and-services.html">제품 및 서비스</a></li>
+				<li class="menu h-item"><a class="bt-costumer-center" href="costumer-support.html">고객 지원</a></li>
+			</ul>
+		</div>
+		<div class="account-field">
+			<ul class="account-for-guest h-bar">
+				<li class="account h-item"><button type="button" class="bt-sign-up">회원가입</button></li>
+				<li class="account h-item"><button type="button" class="bt-log-in">로그인</button></li>
+			</ul>
+			<ul class="account-for-user h-bar">
+				<li class="account h-item"><a class="gnb-user-name" href="account.html">홍길동 님</a></li>
+				<li class="account h-item"><button type="button" class="bt-log-out">로그아웃</button></li>
+			</ul>
+		</div>
+	</div>
+</header>
+<div id="container">
+	<div id="holder" class="privacy-policy-page">
+		<h1 class="page-title">개인정보 취급방침</h1>
+		<ul class="terms expandable">
+			<li id="privacy" class="term expandable-item expanded-always">
+				<h2 class="term-title expandable-handle"><span>개인정보 수집 및 이용 동의</span></h2>
+				<div class="term-holder expandable-content">
+					<ul class="articles">
+						<li class="article">
+							<h1 class="article-title">총칙</h1>
+							<ol class="paragraphs">
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">"개인정보"라 함은 생존하고 있는 개인에 관한 정보로서 성명, 주민등록번호 및 영상 등을 통하여 개인을 알아볼 수 있는 정보(해당 정보만으로는 특정 개인을 알아볼 수 없더라도 다른 정보와 쉽게 결합하여 알아볼 수 있는 것을 포함한다)를 말합니다.</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">스마트홈 서비스(이하 “서비스”라 함)은(는) 고객님의 개인정보보호를 매우 중요시하며, 『정보통신망 이용촉진 및 정보보호 등에 관한 법률』, 『개인정보 보호법』상의 개인정보보호규정을 준수하고 있습니다. 또한 “서비스”는 개인정보 취급방침을 통하여 고객님께서 제공하시는 개인정보가 어떤 용도와 방식으로 이용되고 있으며 개인정보를 효과적이고 적극적으로 보호하기 위해 항상 노력하고 있음에 대해 알려드립니다.</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">”서비스”는 개인정보 취급방침을 홈페이지 첫 화면에 공개함으로써 고객님께서 언제나 용이하게 보실 수 있도록 조치하고 있습니다.</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">”서비스”는 개인정보 취급방침의 지속적인 개선을 위하여 개인정보 취급방침을 개정하는데 필요한 절차를 정하고 있습니다. 그리고 개인정보 취급방침을 개정하는 경우 버전번호, 시행일자 등을 부여하여 개정된 내용을 확인할 수 있도록 하고 있습니다.</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">”서비스”의 개인정보 취급방침 중 중요한 사항이 변경되는 경우에는 변경되는 개인정보 취급방침을 시행하기 전에 홈페이지(<a href="http://www.sktsmarthome.com" class="term-external" target="_blank">www.sktsmarthome.com</a>) 등을 통하여 변경이유 및 내용을 고객에게 공지합니다.</span>
+								</li>
+							</ol>
+						</li>
+						<li>
+							<h1 class="article-title">개인정보의 수집 항목 및 이용 목적</h1>
+							<ol class="paragraphs">
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">”서비스”는 기본적인 서비스 제공을 위한 ‘필수동의’와 고객 각각의 기호와 필요에 맞는 서비스를 제공하기 위한 ‘선택동의’로 구분되어 다음의 정보를 수집하고 있습니다. 선택동의를 하지 않은 경우에도 서비스 이용 제한은 없습니다.</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">”서비스”는 고객의 기본적 인권 침해의 우려가 있는 민감한 개인정보(인종 및 민족, 사상 및 신조, 출신지 및 본적지, 정치적 성향 및 범죄기록, 건강상태 및 성생활 등)는 수집하지 않습니다.</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">필수동의 사항</span>
+									<table class="term-attached-table">
+										<thead>
+											<tr>
+												<th>수집 항목</th>
+												<th>이용 목적</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+													<ul>
+														<li>ID (Email), PASSWORD</li>
+														<li>이동전화번호</li>
+														<li>휴대폰 단말기 식별 정보(IMEI, UUID 등)</li>
+														<li>가전기기 식별정보(MAC address), 접속 IP 정보</li>
+													</ul>
+												</td>
+												<td>
+													<ul class="square-lead-list">
+														<li>서비스 이용에 따른 본인 확인, 개인 식별</li>
+														<li>고객센터 운영</li>
+														<li>불량회원의 부정 이용 방지, 비인가 사용 방지</li>
+														<li>가전기기 제어, 상태 모니터링 등 서비스 제공</li>
+														<li>서비스 관련 정보 및 고지사항 전달</li>
+													</ul>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<ul>
+														<li>신용카드 정보<span class="term-remark">(카드번호, 유효기간)</span>,</li>
+														<li>아이핀 ID/Password</li>
+														<li>생년월일</li>
+														<li>통신사정보</li>
+														<li>휴대폰명의정보, 서비스관련 과금 청구/수납정보</li>
+													</ul>
+												</td>
+												<td>
+													<ul class="square-lead-list">
+														<li>유료 서비스 이용을 위한 사용자 실명인증 및 결제</li>
+														<li>서비스 제공에 관한 계약 이행 및 서비스 제공에 따른 요금 정산</li>
+													</ul>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">법령에 따라 수집/이용하는 정보</span>
+									<p>- 서비스 이용 내역, 접속 로그 등 서비스 이용 기록</p>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">“서비스”는 상기 동의를 받은 개인정보를 통계화 등 개인을 식별할 수 없는 정보로 가공하여 이용할 수 있습니다.</span>
+								</li>
+							</ol>
+						</li>
+						<li class="article">
+							<h1 class="article-title">개인정보 수집에 대한 동의</h1>
+							<ol class="paragraphs">
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">“서비스”는 고객님의 ‘개인정보 수집 및 이용’에 대한 별도의 동의획득 절차를 두고, 고객님께서 이에 대해 '동의한다' 또는 '동의하지 않는다' 버튼을 클릭할 수 있는 절차를 마련하고 있습니다. '동의한다' 버튼을 클릭하면 개인정보 수집 및 이용에 대해 동의한 것으로 봅니다.</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">고객님은 개인정보 수집 및 이용에 대한 동의를 거부할 권리가 있으며, 동의를 거부할 경우 받는 별도의 불이익은 없습니다. 단, 서비스 이용이 불가능하거나, 서비스 이용 목적에 따른 서비스 제공에 제한이 따르게 됩니다.</span>
+								</li>
+							</ol>
+						</li>
+						<li class="article">
+							<h1 class="article-title">개인정보의 수집 방법</h1>
+							<p class="article-statement">“서비스”는 고객으로부터 직접 입력을 받거나, 서비스 이용과정에서 자동으로 조회 생성되어 개인정보를 수집을 통한 방법 등으로 개인정보를 수집합니다. ‘선택수집정보’는 고객으로부터 직접 입력을 통한 방법 등으로 개인정보를 수집합니다</p>
+						</li>
+						<li class="article">
+							<h1 class="article-title">수집한 개인정보의 이용 및 제3자 제공</h1>
+							<p class="article-statement">“서비스”는 고객님의 개인정보를 서비스이용약관, 본 개인정보 취급방침의 '개인정보의 수집 항목 및 이용 목적'에서 고지한 범위 내에서 사용하며, 동 범위를 초과하여 이용하거나 타인 또는 타기업 · 기관에 제공하지 않습니다. 단, 다음의 경우에는 주의를 기울여 개인정보를 이용 및 제공할 수 있습니다.</p>
+							<ol class="paragraphs">
+								<li class="paragraph">
+									<span class="paragraph-number">가.</span>
+									<span class="paragraph-statement">제휴관계</span>
+									<p>보다 나은 “서비스” 제공을 위하여 고객의 개인정보를 제휴사에게 제공하거나 또는 제휴사와 공유할 수 있습니다. 개인정보를 제공하거나 공유할 경우에는 사전에 고객께 제휴사가 누구인지, 제공 또는 공유되는 개인정보항목이 무엇인지, 왜 그러한 개인정보가 제공되거나 공유되어야 하는지, 그리고 언제까지 어떻게 보호 · 관리되는지에 대해 개별적으로 서면 또는 전자우편 등을 통해 고지하여 동의를 구하는 절차를 거치게 되며, 고객께서 동의하지 않는 경우에는 제휴사에게 제공하거나 제휴사와 공유하지 않습니다. 제휴관계에 변화가 있거나 제휴관계가 종결될 때도 같은 절차에 의하여 고지하거나 동의를 구합니다.</p>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">나.</span>
+									<span class="paragraph-statement">매각, 인수합병 등</span>
+									<p>영업의 전부 또는 일부를 양도하거나, 합병 · 상속 등으로 서비스제공자의 권리 · 의무를 이전 승계하는 경우 개인정보보호 관련 고객의 권리를 보장하기 위하여 반드시 그 사실을 고객에게 통지합니다.</p>
+								</li>
+							</ol>
+							<p class="article-statement">“서비스”의 개인정보를 개인정보 수집 시 고객에게 고지한 범위 또는 서비스이용약관에 명시한 범위를 넘어 이용하거나 제 3 자에게 제공하지 않습니다. 다만, 고객의 동의가 있거나 다음에 해당하는 경우에는 예외로 합니다.</p>
+							<ol class="paragraphs">
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">“서비스”의 제공에 관한 계약의 이행을 위하여 필요한 개인정보로서 경제적/기술적인 사유로 통상의 동의를 받는 것이 현저히 곤란한 경우</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">“서비스” 제공에 따른 요금정산을 위하여 필요한 경우</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">통신비밀보호법, 국세기본법, 정보통신망 이용촉진 및 정보보호 등에 관한 법률, 개인정보 보호법, 금융실명거래 및 비밀보장에 관한 법률, 신용정보의 이용 및 보호에 관한 법률, 전기통신기본법, 전기통신사업법, 지방세법, 소비자기본법, 한국은행법, 형사소송법 등 다른 법률에 특별한 규정이 있는 경우</span>
+								</li>
+							</ol>
+							<p class="article-statement">단, '법률에 특별한 규정이 있는 경우'로 행정목적이나 수사목적으로 행정관청 또는 수사기관이 요구해 온 경우라도 무조건 고객의 개인정보를 제공하지 않으며, 법률에 규정된 바에 따라 영장 또는 기관장의 직인이 날인된 서면에 의한 경우 등 적법한 절차에 따라 제공합니다.</p>
+						</li>
+						<li class="article">
+							<h1 class="article-title">개인정보 취급업무의 위탁</h1>
+							<p class="article-statement">“서비스”는 업무위탁계약서 등을 통하여 개인정보보호 관련 법규의 준수, 개인정보에 관한 비밀유지, 제3자 제공에 대한 금지, 사고시의 책임부담, 위탁기간, 처리 종료 후의 개인정보의 반환 또는 파기 의무 등을 규정하고, 이를 준수하도록 관리하고 있습니다.</p>
+							<ul class="paragraphs">
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">”서비스” 제공을 위해 필수적으로 개인정보를 위탁하는 업체 리스트</span>
+									<table class="term-attached-table">
+										<thead>
+											<tr>
+												<th>위탁 협력회사</th>
+												<th>위탁업무내용</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+													<ul>
+														<li>SK플래닛(주)</li>
+														<li>엔텔스(주)</li>
+													</ul>
+												</td>
+												<td>
+													<ul class="square-lead-list">
+														<li>서비스 개발/운영/유지보수 업무</li>
+														<li>고객센터 운영</li>
+													</ul>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<ul>
+														<li>KG이니시스(주)</li>
+													</ul>
+												</td>
+												<td>
+													<ul class="square-lead-list">
+														<li>신용카드 결제 대행</li>
+													</ul>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<ul>
+														<li>SK플래닛(주)</li>
+													</ul>
+												</td>
+												<td>
+													<ul class="square-lead-list">
+														<li>휴대폰소액결제 대행</li>
+														<li>실명인증 대행</li>
+													</ul>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<ul>
+														<li>NICE평가정보(주)</li>
+													</ul>
+												</td>
+												<td>
+													<ul class="square-lead-list">
+														<li>아이핀 실명인증 대행</li>
+													</ul>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</li>
+							</ul>
+						</li>
+						<li class="article">
+							<h1 class="article-title">개인정보의 열람, 정정, 동의 철회(회원탈퇴)</h1>
+							<p class="article-statement">회사는 고객님의 “서비스” 가입일로부터 고객님께 “서비스”를 제공하는 기간 동안에 한하여 고객님의 개인정보를 보유 및 이용하게 됩니다. 회원 탈퇴를 요청하거나 개인정보의 수집 및 이용에 대한 동의를 철회하는 경우, 수집/이용목적을 달성하거나 보유/이용기간이 종료한 경우, 사업폐지 등의 사유발생시 당해 개인정보를 지체없이 파기합니다.</p>
+							<p class="article-statement">“서비스”는 고객이 개인정보에 대한 열람 · 증명 또는 정정을 요구하는 경우에는 고객의 요구에 성실하게 대응하고, 해당 개인정보에 오류가 있거나 보존기간을 경과한 것이 판명되는 등 정정ㆍ삭제를 할 필요가 있다고 인정되는 경우에는 지체 없이 정정 · 삭제를 합니다.</p>
+							<p class="article-statement">또한 회원가입 등을 통해 개인정보의 수집, 이용, 제공에 대해 동의하신 내용을 언제든지 철회하실 수 있습니다. 동의 철회(회원탈퇴)를 하고자 할 경우에는 '회원가입해지'를 클릭하여 직접 신청하실 수 있습니다. </p>
+						</li>
+						<li class="article">
+							<h1 class="article-title">개인정보의 보유기간 및 이용기간</h1>
+							<p class="article-statement">고객님은 언제든지 등록되어 있는 고객님의 개인정보를 열람하거나 정정하실 수 있습니다. 개인정보 열람 및 정정을 하고자 할 경우에는 '회원정보변경'을 클릭하여 직접 열람 또는 정정하실 수 있습니다.</p>
+							<p class="article-statement">단, 이용요금의 정산, 소송이나 분쟁 등 기타 필요한 경우를 대비하여 일정기간 보유하여야 할 필요가 있을 경우 개인정보는 일정기간 보유합니다.</p>
+							<p class="article-statement">또한 상법, 국세기본법, 통신비밀보호법, 전자상거래 등에서 소비자보호에 관한 법률, 신용정보의 이용 및 보호에 관한 법률 등 관계법령에 따라 보존할 필요가 있는 경우 회사는 관계법령에서 정한 기간 동안 회원정보를 보관합니다. 이 경우 회사는 보관하는 정보를 그 보관의 목적으로만 이용하며 보존기간은 다음과 같습니다.</p>
+							<ol class="paragraphs">
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">상업장부와 영업에 관한 중요서류 및 전표 : 중요서류는 10년 / 전표(상법)는 5년</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">거래에 관한 장부 및 증빙서류 : 5년(국세기본법, 법인세법, 부가가치세법 등)</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">표시/광고에 관한 기록 : 6개월(전자상거래등에서의 소비자보호에 관한 법률)</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">계약 또는 청약철회 등에 관한 기록 : 5년(전자상거래등에서의 소비자보호에 관한 법률)</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">대금결제 및 재화 등의 공급에 관한 기록 : 5년(전자상거래등에서의 소비자보호에 관한 법률)</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">소비자의 불만 또는 분쟁처리에 관한 기록 : 3년(전자상거래등에서의 소비자보호에 관한 법률)</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">신용정보의 수집/처리 및 이용 등에 관한 기록 : 3년(신용정보의 이용 및 보호에 관한 법률)</span>
+								</li>
+							</ol>
+						</li>
+						<li class="article">
+							<h1 class="article-title">개인정보 파기 절차 및 방법</h1>
+							<p class="article-statement">“서비스”는 수집한 개인정보의 이용목적이 달성된 후에는 보관기간 및 이용기간에 따라 해당 정보를 지체 없이 파기합니다. 파기절차, 방법, 시점은 다음과 같습니다.</p>
+							<ol class="paragraphs">
+								<li class="paragraph">
+									<span class="paragraph-number">가.</span>
+									<span class="paragraph-statement">파기절차 및 시점</span>
+									<p>고객이 “서비스” 가입 등을 위해 기재한 개인정보는 “서비스” 해지 등 이용목적이 달성된 후 내부 방침 및 기타 관련 법령에 의한 정보보호 방침에 의해 삭제되거나 파기합니다. 일반적으로 채권-채무 관계가 없는 경우, “서비스” 회원시 수집되어 전자적 파일형태로 관리하는 개인정보는 회원 탈퇴 시점에 바로 삭제 됩니다. 단, 고객에게 미리 고지하고 개별 동의를 받은 경우는 동의한 내용에 따른 보유기간 동안 보유 후 삭제되며, 관련 법령의 규정에 의하여 개인정보를 보유해야 할 필요가 있는 경우에는 해당 법령에서 정한 기간 동안 보유한 후 해당 기간이 지나면 회원의 모든 데이터를 삭제합니다.</p>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">나.</span>
+									<span class="paragraph-statement">파기방법</span>
+									<p>가입신청서 등 서면양식에 기재하거나, 종이에 출력된 개인정보는 분쇄기로 분쇄 또는 소각하거나 화학약품 처리를 하여 용해하여 파기하고, 전자적 파일형태로 저장된 개인정보는 기록을 재생할 수 없는 기술적 방법을 사용하여 삭제합니다.</p>
+								</li>
+							</ol>
+						</li>
+						<li class="article">
+							<h1 class="article-title">만 14세 미만 아동의 법정대리인의 권리와 그 행사 방법</h1>
+							<p class="article-statement">만14세 미만의 아동은 “서비스”를 이용할 수 없습니다.</p>
+							<p class="article-statement">단, 만14세 미만의 아동의 개인정보 수집 및 이용이 필요한 경우, 회사는 만 14세 미만의 아동으로부터 개인정보 수집·이용·제공하기 위해 관련 법령에 따라 그 법정대리인의 동의를 받습니다. 이 경우 회사는 그 아동에게 법정대리인의 동의를 받기 위하여 필요한 법정대리인의 성명 등 최소한의 정보를 요구할 수 있습니다.</p>
+							<p class="article-statement">만 14세 미만 아동의 법정대리인은 아동의 개인정보에 대한 열람, 수정 및 삭제를 요청할 수 있으며, 회사는 이러한 요청에 지체 없이 필요한 조치를 취합니다.</p>
+						</li>
+						<li class="article">
+							<h1 class="article-title">이용자의 권리와 의무</h1>
+							<p class="article-statement">고객님의 개인정보를 최신의 상태로 정확하게 입력하여 불의의 사고를 예방해 주시기 바랍니다. 입력한 부정확한 정보로 인해 발생하는 사고의 책임은 고객님께 있으며 타인 정보의 도용 등 허위정보를 입력할 경우 회원자격이 상실될 수 있습니다.</p>
+							<p class="article-statement">고객님은 개인정보를 보호받을 권리와 함께 스스로를 보호하고 타인의 정보를 침해하지 않을 의무도 가지고 있습니다. 패스워드를 포함한 고객님의 개인정보가 유출되지 않도록 조심하시고 게시물을 포함한 타인의 개인정보를 훼손하지 않도록 유의해 주십시오. 만약 이 같은 책임을 다하지 못하고 타인의 정보를 훼손할 시에는 『정보통신망 이용촉진 및 정보보호 등에 관한 법률』등에 의해 처벌받을 수 있습니다.</p>
+						</li>
+						<li class="article">
+							<h1 class="article-title">개인정보 자동 수집 장치의 설치/운영 및 그 거부에 대한 사항</h1>
+							<p class="article-statement">“서비스”에서 제공하는 인터넷서비스를 통하여 고객님의 정보를 저장하고 수시로 찾아내는 쿠키(cookie)를 설치/운용할 경우도 있습니다. 쿠키란 웹 서버가 웹 브라우저에 보내어 저장했다가 서버의 부가적인 요청이 있을 때 다시 서버로 보내주는 문자열 정보를 말합니다. 고객님께서 “서비스” 웹사이트에 접속을 하면 고객님의 브라우저에 있는 쿠키의 내용을 읽고, 추가정보를 찾아 접속에 따른 성명 등의 추가 입력 없이 서비스를 제공할 수 있습니다.</p>
+							<p class="article-statement">“서비스”가 쿠키를 통해 수집하는 정보는 회원의 ID에 한하며, 그 외의 다른 정보는 수집하지 않습니다. 회사가 쿠키(cookie)를 통해 수집한 회원의 ID는 다음의 목적을 위해 사용될 수 있습니다.</p>
+							<ol class="paragraphs">
+								<li class="paragraph">
+									<span class="paragraph-number">가.</span>
+									<span class="paragraph-statement">개인의 관심 분야에 따라 차별화된 정보를 제공</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">나.</span>
+									<span class="paragraph-statement">회원과 비회원의 접속 빈도 또는 머문 시간 등을 분석하여 이용자의 취향과 관심분야를 파악하여 마케팅에 활용</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">다.</span>
+									<span class="paragraph-statement">관심 있게 둘러본 내용들에 대한 자취를 추적하여 다음 번 접속 때 개인 맞춤 서비스를 제공</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">라.</span>
+									<span class="paragraph-statement">유료서비스 이용 시 이용기간 안내</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">마.</span>
+									<span class="paragraph-statement">회원들의 습관을 분석하여 서비스 개편 등의 척도로 활용</span>
+								</li>
+							</ol>
+							<p class="article-statement">고객님께서는 쿠키 설치에 대한 선택권을 가지고 있습니다. 웹 브라우저 상단의 “도구 > 인터넷옵션 > 개인정보 > 고급”에서 모든 쿠키를 다 받아들이거나, 쿠키가 설치될 때 통지를 보내도록 하거나, 아니면 모든 쿠키를 거부할 수 있습니다. 단, 고객님께서 쿠키 설치를 거부하였을 경우 서비스 이용에 불편이 있거나, 서비스 제공에 어려움이 있을 수 있습니다. 쿠키는 브라우저의 종료 시나 로그 아웃 시 만료됩니다.</p>
+						</li>
+						<li class="article">
+							<h1 class="article-title">개인정보 취급방침의 고지 또는 통지방법</h1>
+							<p class="article-statement">”서비스”가 개인정보 수집시 고지한 범위 또는 서비스이용약관, 본 개인정보 취급방침에 명시한 범위를 넘어 고객의 개인정보를 이용하거나 제3자에게 제공하기 위해 고객의 동의를 얻고자 하는 때에는 미리 고객에게 개별적으로 서면, 전자우편, 전화 등으로 해당사항을 고지합니다. 타인에게 고객의 개인정보의 수집·보관·처리·이용·제공·관리·파기 등을 위탁하는 경우에는 서비스이용약관, 웹사이트의 개인정보 취급방침 등을 통하여 그 사실을 고객에게 고지합니다.</p>
+							<p class="article-statement">”서비스”가 영업의 전부 또는 일부를 양도하거나 합병ㆍ상속 등으로 그 권리ㆍ의무를 이전하는 경우 서면ㆍ전자우편 등을 통하여 고객에게 개별적으로 통지함과 동시에 홈페이지(<a href="http://www.sktsmarthome.com" class="term-external">www.sktsmarthome.com</a>) 첫 화면에서 식별할 수 있도록 표기하여 30일 이상 그 사실을 공지합니다. 다만, 서면ㆍ전자우편에 의한 통지는 과실 없이 고객의 연락처를 알지 못하거나 천재ㆍ지변 기타 통지할 수 없는 정당한 이유가 있는 경우에는 홈페이지(<a href="http://www.sktsmarthome.com" class="term-external" target="_blank">www.sktsmarthome.com</a>) 첫 화면에서 공지하는 것으로 갈음합니다.</p>
+							<p class="article-statement">만 14세 미만 아동의 개인정보 수집ㆍ이용 또는 제3자에게 제공하기 위하여 법정대리인의 동의를 받고자 하는 경우에는 전화, 팩스, 우편, 아동으로 하여금 통지내용을 법정대리인에게 제출하게 하는 방법, 법정대리인에게 전자우편을 보내면서 홈페이지(<a href="http://www.sktsmarthome.com" class="term-external" target="_blank">www.sktsmarthome.com</a>)의 개인정보 취급방침을 볼 수 있도록 연결(하이퍼링크)시키는 방법 또는 기타 법정대리인에게 고지내용이 도달할 수 있는 합리적인 방법을 통하여 법정대리인에게 고지합니다.</p>
+						</li>
+						<li class="article">
+							<h1 class="article-title">개인정보보호를 위한 기술 및 관리적 대책</h1>
+							<p class="article-statement">“서비스”에서는 고객님의 개인정보를 보호하기 위해 기술적 대책과 관리적 대책을 마련하고 있으며, 이를 적용하고 있습니다.</p>
+							<ol class="paragraphs">
+								<li class="paragraph">
+									<span class="paragraph-number">가.</span>
+									<span class="paragraph-statement">기술적 대책</span>
+									<p>“서비스”는 고객님의 개인정보를 취급함에 있어 개인정보가 분실, 도난, 누출, 변조 또는 훼손되지 않도록 안전성 확보를 위하여 다음과 같은 기술적 대책을 강구하고 있습니다.</p>
+									<ul class="sub-paragraph-list">
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">고객님의 개인정보는 비밀번호에 의해 보호되며 파일 및 전송데이터를 암호화하거나 파일 잠금기능(Lock)을 사용하여 중요한 데이터는 별도의 보안기능을 통해 보호되고 있습니다.</span>
+										</li>
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">”서비스”는 백신프로그램을 이용하여 컴퓨터 바이러스에 의한 피해를 방지하기 위한 조치를 취하고 있습니다. 백신프로그램은 주기적으로 업데이트되며 갑작스런 바이러스가 출현할 경우 백신이 나오는 즉시 이를 제공함으로써 개인정보가 침해되는 것을 방지하고 있습니다.</span>
+										</li>
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">”서비스”는 암호알고리즘을 이용하여 네트워크 상의 개인정보를 안전하게 전송할 수 있는 보안장치(SSL 또는 SET)를 채택하고 있습니다.</span>
+										</li>
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">해킹 등 외부침입에 대비하여 각 서버마다 침입차단시스템 및 취약점 분석시스템 등을 이용하여 보안에 만전을 기하고 있습니다.</span>
+										</li>
+									</ul>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">나.</span>
+									<span class="paragraph-statement">관리적 대책</span>
+									<p>“서비스”는 개인정보의 안전한 보호를 위하여 주요 시스템 및 설비에 대하여 외부 전문기관으로부터 정보보호관리체계 인증 등 객관적인 인증을 받아 운영되고 있습니다.</p>
+									<p>“서비스”는 고객의 개인정보에 대한 접근 및 관리에 필요한 절차 등을 마련하여 소속 직원으로 하여금 이를 숙지하고 준수하도록 하고 있습니다.</p>
+									<p>“서비스”는 고객님의 개인정보에 대한 접근권한을 최소한의 인원으로 제한하고 있습니다. 그 최소한의 인원에 해당하는 자는 다음과 같습니다.</p>
+									<ul class="sub-paragraph-list">
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">이용자를 직접 상대로 하여 마케팅 업무를 수행하는 자</span>
+										</li>
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">개인정보관리책임자 및 담당자 등 개인정보관리업무를 수행하는 자</span>
+										</li>
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">기타 업무상 개인정보의 취급이 불가피한 자</span>
+										</li>
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">”서비스”는 컴퓨터를 이용하여 고객의 개인정보를 처리하는 경우 개인정보에 대한 접근권한을 가진 담당자를 지정하여 식별부호(ID) 및 비밀번호를 부여하고, 해당 비밀번호를 정기적으로 갱신하고 있습니다.</span>
+										</li>
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">개인정보를 취급하는 직원을 대상으로 새로운 보안 기술 습득 및 개인정보보호 의무 등에 관해 정기적인 사내 교육 및 외부 위탁교육을 실시하고 있습니다.</span>
+										</li>
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">신규직원 채용 시 정보보호서약서 또는 개인정보보호서약서에 서명함으로 직원에 의한 정보유출을 사전에 방지하고 개인정보 취급방침에 대한 이행사항 및 직원의 준수여부를 감사하기 위한 내부절차를 마련하여 지속적으로 시행하고 있습니다.</span>
+										</li>
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">직원 퇴직 시 비밀유지서약서에 서명함으로 고객의 개인정보를 취급하였던 자가 직무상 알게 된 개인정보를 훼손ㆍ침해 또는 누설하지 않도록 하고 있습니다.</span>
+										</li>
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">개인정보 관련 취급자의 업무 인수인계는 보안이 유지된 상태에서 철저하게 이뤄지고 있으며 입사 및 퇴사 후 개인정보 사고에 대한 책임을 명확히 하고 있습니다.</span>
+										</li>
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">서비스이용계약체결 또는 서비스제공을 위하여 고객의 신용카드번호, 은행결제계좌 등 대금결재에 관한 정보를 수집하거나 고객에게 제공하는 경우 당해 고객이 본인임을 확인하기 위하여 필요한 조치를 취하고 있습니다.</span>
+										</li>
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">회사는 이용자 개인의 실수나 기본적인 인터넷의 위험성 때문에 일어나는 일들에 대해 책임을 지지 않습니다. 회원 개개인이 본인의 개인정보를 보호하기 위해서 자신의 ID 와 패스워드를 적절하게 관리하고 여기에 대한 책임을 져야 합니다.</span>
+										</li>
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">또한, 다른 사람이 추측할 수 있는 쉬운 비밀번호는 사용을 피하시기를 권장하며, 정기적으로 비밀번호를 변경하시는 것이 바람직합니다.</span>
+										</li>
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">특히, 공동으로 사용하는 PC에서 저희 홈페이지를 접속하여 로그인 한 상태에서 다른 사이트로 이동하는 경우, “서비스” 이용을 종료하는 경우에는 반드시 로그아웃 처리 후 해당 홈페이지를 종료하시기 바랍니다. 그렇지 않을 경우, 해당 브라우저를 통해 ID, 비밀번호 등 고객님의 정보가 타인에게 쉽게 유출될 위험이 있습니다.</span>
+										</li>
+										<li class="sub-paragraph-item">
+											<span class="sub-paragraph-number">&nbsp;•&nbsp;</span>
+											<span class="sub-paragraph-statement">그 외 내부 관리자의 실수나 기술관리 상의 사고로 인해 개인정보의 상실, 유출, 변조, 훼손이 유발될 경우 “서비스”는 즉각 고객님께 사실을 알리고 적절한 대책과 보상을 강구할 것입니다.</span>
+										</li>
+									</ul>
+								</li>
+							</ol>
+						</li>
+						<li class="article">
+							<h1 class="article-title">의견 수렴 및 불만 처리</h1>
+							<p class="article-statement">회사는 고객의 의견을 매우 소중하게 생각합니다. 고객께서 문의사항이 있을 경우 고객센터 등에 연락을 하여 문의하시면 신속 · 정확한 답변을 드리겠습니다. 고객센터 연락처는 다음과 같습니다.</p>
+							<ol class="paragraphs">
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">전화번호 : 1800-0212</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">사이버상담 : <a href="http://www.sktsmarthome.com" target="_blank" class="term-external">www.sktsmarthome.com</a> 또는 스마트홈 어플리케이션에 접속하신 후 고객센터 메뉴의 1:1 문의에서 작성 후 제출하는 방법을 통해 질문을 하실 수 있습니다.</span>
+								</li>
+							</ol>
+						</li>
+						<li class="article">
+							<h1 class="article-title">개인정보관리 책임자 및 담당자</h1>
+							<p class="article-statement">회사는 고객님이 안전하게 서비스를 이용할 수 있도록 개인정보 보호에 최선을 다하고 있습니다. 개인정보를 보호하는데 있어 고객님께 고지한 사항들에 반하는 사고가 발생할 시에 개인정보관리책임자가 모든 책임을 집니다. 고객님의 개인정보를 취급하는 책임자 및 담당자는 다음과 같으며 개인정보 관련 문의사항에 신속하고 성실하게 답변해드리고 있습니다.</p>
+							<ol class="paragraphs">
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">개인정보관리책임자 : 민욱 PL</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">개인정보관리담당자 : 박준석 매니저</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">소속부서 : SK텔레콤 스마트홈 TF</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">전화번호 : 02-6100-5555</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">이메일 : pjs3894@sk.com</span>
+								</li>
+							</ol>
+						</li>
+						<li class="article">
+							<h1 class="article-title">아동의 개인정보보호</h1>
+							<p class="article-statement">회사가 “서비스” 이용과 관련하여 만 14세 미만 아동(이하 “아동”이라 함)의 개인정보를 수집하는 경우, 아동이 제공한 개인정보로 인하여 아동 및 그의 법정대리인이 불이익을 입지 않도록 보호 조치를 취하고 있습니다.</p>
+							<p class="article-statement">회사는 “서비스” 관련, 아동의 개인정보에 대하여 아래의 행위를 하는 경우에는 해당 아동의 법정대리인의 동의를 얻도록 하고 있습니다.</p>
+							<ol class="paragraphs">
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">아동의 “서비스” 가입을 위해 개인정보 수집하거나 “서비스” 가입 시 고지한 범위 또는 서비스이용약관에 명시한 범위를 넘어 이동의 개인정보를 이용하거나 제3자에게 제공하고자 하는 경우</span>
+								</li>
+								<li class="paragraph">
+									<span class="paragraph-number">&nbsp;•&nbsp;</span>
+									<span class="paragraph-statement">아동의 개인정보를 제공받은 자가 개인정보를 제공받은 목적 외의 용도로 이용하거나 제3자에게 제공하는 경우</span>
+								</li>
+							</ol>
+						</li>
+						<li class="article">
+							<h1 class="article-title">광고성 정보 전송</h1>
+							<p class="article-statement">“서비스”는 고객의 사전 동의 없이 영리목적의 광고성 정보를 전송하지 않습니다.</p>
+							<p class="article-statement">“서비스”는 신상품이나 이벤트 정보안내 등 고객 지향적인 마케팅을 수행하기 위하여 광고성 정보를 전자우편으로 전송하는 경우에는 광고성 정보 전송에 대한 고객의 사전 동의를 득하고 전자우편의 제목란 및 본문란에 아래와 같이 고객이 광고성 정보임을 쉽게 알아 볼 수 있도록 조치합니다.</p>
+							<p class="article-statement">전자우편의 제목란 : '(광고)' 또는 '(성인광고)'라는 문구를 제목란의 처음에 빈칸 없이 한글로 표시하고 이어서 전자우편 본문란의 주요 내용을 표시합니다. 광고수신에 동의한 고객에게 팩스ㆍ휴대폰 문자전송 등 전자우편 이외의 방법을 통해 영리목적의 광고성 정보를 전송하는 경우에도 전송자의 명칭을 표기하는 등 필요한 조치를 취합니다.</p>
+						</li>
+						<li class="article">
+							<h1 class="article-title">고지의 의무</h1>
+							<p class="article-statement">현 개인정보 취급방침 제정일은 2015년 5월 __일이며, 이번 버전을 1.0으로 명시합니다.</p>
+							<p class="article-statement">“서비스”는 신상품이나 이벤트 정보안내 등 고객 지향적인 마케팅을 수행하기 위하여 광고성 정보를 전자우편으로 전송하는 경우에는 광고성 정보 전송에 대한 고객의 사전 동의를 득하고 전자우편의 제목란 및 본문란에 아래와 같이 고객이 광고성 정보임을 쉽게 알아 볼 수 있도록 조치합니다.</p>
+							<p class="article-statement">정부의 정책 또는 보안기술의 변경에 따라 내용의 추가∙삭제 및 수정이 있을 경우에는 개정 최소 10일 전부터 홈페이지의 '공지’란을 통해 고지할 것입니다.</p>
+						</li>
+					</ul>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<footer id="footer">
+		<div class="footer-field">
+			<ul class="footer-terms h-bar">
+				<li class="footer-term h-item"><a class="bt-term-service" href="terms-and-conditions.html" target="_blank">이용약관</a></li>
+				<li class="footer-term h-item"><a class="bt-term-privacy" href="privacy-policy.html" target="_blank">개인정보 취급방침</a></li>
+			</ul>
+		</div>
+		<div class="footer-field">
+			<ul class="infos">
+				<li class="info"><p>주소: 서울특별시 중구 을지로 65 (을지로 2가) <span>|</span> 대포이사/사장: 장동현 <span>|</span> 사업자 등록번호: 104-81-37225</p></li>
+				<li class="info"><p>고객센터: 1800-0161 <span>|</span> 이메일 문의: <a class="mail-to" href="mailto:smarthome@sk.com">smarthome@sk.com</a></p></li>
+			</ul>
+		</div>
+		<div class="copyright-holder">
+			<p class="copyright">Copyright 2009 SK Telecom. All Rights Reservced.</p>
+		</div>
+	</footer>
+</div>
+</body>
+</html>

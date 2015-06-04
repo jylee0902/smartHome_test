@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD Xhtml 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+        // jQuery의 Ajax메소드를 이용해서 menu.json 파일 읽기.
+            // $.getJSON("http://mobiledev.sktsmarthome.com:9002/v1/device/deviceList",null, parseData);
+            alert("전송 시작!");            
+            $.ajax({
+                url: "http://mobiledev.sktsmarthome.com:9002/v1/device/deviceList",
+                data: '',
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    parseData(response);
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.log('실패 - ', xhr);
+                }
+            });
+        })
+        //7. JSON포맷  데이터 처리.
+        function parseData(response){
+            alert("서버에서 받은 원본 데이터: "+ response);
+            console.log("서버에서 받은 원본 데이터: ", response);
+        }
+    </script>
+</head>
+
+<body>
+</body>
+</html>

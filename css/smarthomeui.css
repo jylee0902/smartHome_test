@@ -1,0 +1,1525 @@
+@charset "utf-8";
+
+html,
+body {
+	width: 100%;
+	height: 100%;
+	min-width: 1349px;
+	min-height: 768px;
+}
+body {
+	position: relative;
+	font: 12px/21px '돋움', dotum, gulim, verdana, 'sans-serif';
+	color: #666;
+}
+
+legend:not(.displayed) {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip:rect(1px, 1px, 1px, 1px);
+}
+
+button,
+a,
+input[type=submit] {
+	box-sizing: content-box;
+	cursor: pointer;
+	font: 12px/100% '돋움', dotum, gulim, verdana, 'sans-serif';
+	text-align: center;
+	text-decoration: none;
+	outline: 0; /*임시*/
+}
+button:disabled {
+	cursor: default;
+	opacity: .5;
+}
+input[type=checkbox] {
+	position: absolute;
+	top: 0;
+	left: -9999px;
+}
+input[type=checkbox] + label {
+	display: inline-block;
+	height: 24px;
+	padding-left: 32px;
+	background: url(../img/bg-checkbox-label.png) no-repeat 0 0;
+	line-height: 24px;
+}
+input[type=checkbox]:checked + label {
+	background-position: 0 -24px;
+}
+
+strong {
+	font-weight: bold;
+}
+
+.edit {
+	box-sizing: border-box;
+	width: 100%;
+	height: 40px;
+	padding: 0 12px;
+	border: 1px solid #dbdbdb;
+	color: #333;
+	outline: 0;
+}
+.text {
+	padding: 10px 12px;
+}
+::-webkit-input-placeholder {
+	color:    #ddd;
+}
+:-moz-placeholder {
+	color:    #ddd;
+	opacity:  1;
+}
+::-moz-placeholder {
+	color:    #ddd;
+	opacity:  1;
+}
+:-ms-input-placeholder {
+	color:    #ddd;
+}
+.invalidate {
+	padding-right: 40px;
+	border-color: #f00;
+	color: #f00;
+	background:url(../img/bg-invalidate.png) no-repeat right 10px;
+}
+.validate {
+	padding-right: 40px;
+	background: url(../img/bg-validate.png) no-repeat right 10px;
+}
+.err-msg {
+	display: none;
+	height: 17px;
+	margin-top: 10px;
+	line-height: 17px;
+	font-size: 11px;
+	color: #f00;
+	text-align: left;
+}
+.invalidate ~ .err-msg {
+	display: block;
+}
+
+
+.h-bar {
+	display: block;
+	overflow: hidden;
+}
+.h-bar::after {
+	content: '';
+	display: block;
+	clear: both;
+}
+.h-bar > .h-item {
+	display: block;
+	float: left;
+}
+
+.expandable {
+	margin-top: 28px;
+	border: 1px solid #ebebeb;
+}
+.expandable-item:not(:last-child) {
+	border-bottom: 1px solid #f6f6f6;
+}
+.expandable-handle {
+	height: 18px;
+	padding: 31px 22px 31px 55px;
+	background: #fff url(../img/bg-faq-question.png) no-repeat 24px center;
+	cursor: pointer;
+}
+.expandable-handle span {
+	display: block;
+	height: 18px;
+	line-height: 18px;
+	background: url(../img/vi-expandable-handle-arrow.png) no-repeat right 0;
+	font-size: 14px;
+	font-weight: bold;
+	color: #333;
+}
+.expandable-content {
+	padding: 48px;
+	background: #fafafa;
+	line-height: 24px;
+	color: #333;
+}
+.accordion .expandable-content {
+	display: none;
+}
+.expanded .expandable-handle span {
+	background-position: right -18px;
+}
+.expanded-always .expandable-handle span {
+	background: 0;
+}
+.expanded .expandable-content {
+	display: block;
+}
+.expanded-always .expandable-content {
+	display: block;
+}
+.terms-and-conditions-page .expandable-handle {
+	height: 18px;
+	padding: 31px 22px;
+	background: #fff;
+	cursor: default;
+}
+.privacy-policy-page .expandable-handle {
+	display: none;
+}
+
+.store-holder {
+	position: absolute;
+	top: 78px;
+	right: 0;
+}
+.store:not(:first-child) {
+	margin-left: 6px;
+}
+.store a {
+	display: block;
+	width: 114px;
+	height: 35px;
+	background: no-repeat 0 0;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.store a:hover {
+	background-position: 0 -35px;
+}
+.store .bt-tstore {
+	background-image: url(../img/bt-tstore.png);
+}
+.store .bt-google-play {
+	background-image: url(../img/bt-google-play.png);
+}
+.store .bt-app-store {
+	background-image: url(../img/bt-app-store.png);
+}
+
+#gnb-holder {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 1000;
+	min-width: 1349px;
+	height: 90px;
+	border-bottom: 1px solid #c7c7c7;
+	background: #fff;
+	transition: background-color .5s;
+}
+.state-0 #gnb-holder {
+	background: rgba(255, 255, 255, 0);
+	border-bottom: 0;
+}
+.state-1 #gnb-holder {
+	background: rgba(255, 255, 255, .5);
+	border-bottom: 0;
+}
+#gnb {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+#gnb button,
+#gnb a {
+	display: block;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+#gnb::after {
+	content: '';
+	display: block;
+	clear: both;
+}
+.menu-field {
+	float: left;
+}
+.logo {
+	width: 160px;
+	height: 54px;
+	margin: 18px 0 18px 50px;
+	background: url(../img/bt-logo.png) no-repeat;
+}
+.state-0 .logo,
+.state-1 .logo {
+	background-image: url(../img/bt-logo-white.png);
+}
+.menus {
+	margin: 33px 0 33px 50px;
+}
+.menu {
+	padding-left: 28px;
+	background: url(../img/vi-menu-sep.png) no-repeat 0 -24px;
+}
+.state-0 .menu,
+.state-1 .menu{
+	background-position: 0 0;
+}
+
+.menu:first-child {
+	padding-left: 0;
+	background: 0;
+}
+.menu > a {
+	height: 24px;
+}
+.bt-products-and-services {
+	width: 98px;
+	background: url(../img/bt-products-and-services.png) no-repeat 0 -72px;
+}
+.bt-products-and-services.selected,
+.bt-products-and-services:hover {
+	background-position: 0 -96px;
+}
+.state-0 .bt-products-and-services {
+	background-position: 0 -24px;
+}
+.state-0 .bt-products-and-services.selected,
+.state-0 .bt-products-and-services:hover {
+	background-position: 0 -48px;
+}
+.state-1 .bt-products-and-services {
+	background-position: 0 -24px;
+}
+.state-1 .bt-products-and-services.selected,
+.state-1 .bt-products-and-services:hover {
+	background-position: 0 -48px;
+}
+.bt-costumer-center {
+	width: 72px;
+	background: url(../img/bt-costumer-center.png) no-repeat 0 -72px;
+}
+.bt-costumer-center.selected,
+.bt-costumer-center:hover {
+	background-position: 0 -96px;
+}
+.state-0 .bt-costumer-center {
+	background-position: 0 -24px;
+}
+.state-0 .bt-costumer-center.selected,
+.state-0 .bt-costumer-center:hover {
+	background-position: 0 -48px;
+}
+.state-1 .bt-costumer-center {
+	background-position: 0 -24px;
+}
+.state-1 .bt-costumer-center.selected,
+.state-1 .bt-costumer-center:hover {
+	background-position: 0 -48px;
+}
+.account-field {
+	float: right;
+	margin: 33px 50px 32px 0;
+}
+.account-for-user {
+	display: none;
+}
+.logged-in .account-for-guest {
+	display: none;
+}
+.logged-in .account-for-user {
+	display: block;
+}
+.account {
+	margin-left: 8px;
+}
+.account > button,
+.account > a {
+	width: 69px;
+	height: 25px;
+}
+.bt-sign-up {
+	background: url(../img/bt-sign-up.png) no-repeat 0 -50px;
+}
+.bt-sign-up:hover {
+	background-position: 0 -75px;
+}
+.state-0 .bt-sign-up,
+.state-1 .bt-sign-up {
+	background-position: 0 0;
+}
+.state-0 .bt-sign-up:hover,
+.state-1 .bt-sign-up:hover {
+	background-position: 0 -25px;
+}
+
+.bt-log-in {
+	background: url(../img/bt-log-in.png) no-repeat 0 -50px;
+}
+.bt-log-in:hover {
+	background-position: 0 -75px;
+}
+.state-0 .bt-log-in,
+.state-1 .bt-log-in {
+	background-position: 0 0;
+}
+.state-0 .bt-log-in:hover,
+.state-1 .bt-log-in:hover {
+	background-position: 0 -25px;
+}
+
+.bt-log-out {
+	background: url(../img/bt-log-out.png) no-repeat 0 -50px;
+}
+.bt-log-out:hover {
+	background-position: 0 -75px;
+}
+.state-0 .bt-log-out,
+.state-1 .bt-log-out {
+	background-position: 0 0;
+}
+.state-0 .bt-log-out:hover,
+.state-1 .bt-log-out:hover {
+	background-position: 0 -25px;
+}
+
+#gnb .gnb-user-name {
+	line-height: 25px;
+	color: #333;
+	text-indent: 0;
+	text-decoration: underline;
+}
+.state-0 #gnb .gnb-user-name,
+.state-1 #gnb .gnb-user-name {
+	color: #fff;
+}
+
+#footer {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: 95px;
+	padding: 27px 0 0 44px;
+	background: #4b4c4d;
+}
+.footer-terms {
+	margin-bottom: 17px;
+}
+.footer-term {
+	padding-left: 9px;
+	background: url(../img/vi-footer-term-sep.png) no-repeat 0 center;
+}
+.footer-term:first-child {
+	padding-left: 0;
+	background: 0;
+}
+.footer-term > a {
+	display: block;
+	height: 18px;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.bt-term-service {
+	width: 48px;
+	background: url(../img/bt-term-service.png) no-repeat;
+}
+.bt-term-privacy {
+	width: 90px;
+	background: url(../img/bt-term-privacy.png) no-repeat;
+}
+.info,
+.copyright,
+.mail-to {
+	line-height: 18px;
+	color: #828282;
+}
+.info span {
+	color: #636363;
+}
+.info span::before,
+.info span::after {
+	content: '';
+	margin-left: 5px;
+}
+.mail-to {
+	display: inline;
+	text-decoration: underline;
+}
+.copyright {
+	position: absolute;
+	top: 30px;
+	right: 50px;
+	text-align: right;
+}
+
+#container {
+	position: relative;
+	box-sizing: border-box;
+	width: 100%;
+	min-width: 1349px;
+	min-height: 100%;
+	padding: 90px 0 122px;
+	background: #f6f6f6;
+}
+.has-headline #container {
+	padding-top: 0;
+}
+
+#headline {
+	height: 556px;
+	background: url(../img/bg-headline.png) no-repeat center 0;
+	-webkit-background-size: cover;
+	background-size: cover;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.headline-icon {
+	width: 350px;
+	height: 350px;
+	margin: 41px auto 0;
+	background: url(../img/vi-headline.png) no-repeat;
+}
+#headline h1 {
+	width: 582px;
+	height: 88px;
+	margin: 10px auto;
+	background: url(../img/ti-headline.png) no-repeat;
+}
+
+#holder {
+	position: relative;
+	width: 956px;
+	padding: 49px 0 40px;
+	margin: 0 auto;
+}
+#holder.products-and-services-page {
+	padding-top: 10px;
+}
+
+.page-title {
+	height: 30px;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.withdraw-page > .page-title {
+	background: url(../img/ti-withdraw-page.png) no-repeat;
+}
+.costumer-support-page > .page-title {
+	background: url(../img/ti-costumer-support-page.png) no-repeat;
+}
+.terms-and-conditions-page > .page-title {
+	background: url(../img/ti-terms-and-conditions-page.png) no-repeat;
+}
+.privacy-policy-page > .page-title {
+	background: url(../img/ti-privacy-policy-page.png) no-repeat;
+}
+.account-page > .page-title {
+	background: url(../img/ti-account-page.png) no-repeat;
+}
+
+.page-description {
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.page-description {
+	margin-top: 20px;
+}
+.costumer-support-page > .page-description {
+	height: 15px;
+	background: url(../img/bg-costumer-support-page-description.png) no-repeat;
+}
+.account-page > .page-description {
+	height: 15px;
+	background: url(../img/bg-account-page-description.png) no-repeat;
+}
+
+.withdraw-page section {
+	border: 1px solid #f0f0f0;
+	border-bottom: 0;
+}
+.withdraw-page section:nth-of-type(1) {
+	margin-top: 30px;
+}
+
+.withdraw-page .section-title {
+	height: 78px;
+	background: #fbfbfb no-repeat 28px center;
+	border-bottom: 1px solid #f0f0f0;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.withdraw-page .section-notice {
+	background-image: url(../img/ti-withdraw-section-notice.png);
+}
+
+.section-content {
+	padding: 46px 28px;
+	border-bottom: 1px solid #f0f0f0;
+	background: #fff;
+}
+
+.sub-section-title {
+	height: 17px;
+	margin-bottom: 17px;
+	line-height: 17px;
+	font-weight: bold;
+	color: #333;
+}
+
+.sub-section {
+	margin-bottom: 44px;
+}
+.sub-section:last-child {
+	margin-bottom: 0;
+}
+
+.bt-group {
+	position: relative;
+	left: 50%;
+}
+.withdraw-page .bt-group {
+	width: 350px;
+	margin: 34px 0 28px -175px;
+}
+.bt-group button {
+	display: block;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+	background: no-repeat 0 0;
+}
+.bt-group .bt-cancel {
+	width: 170px;
+	height: 54px;
+	background-image: url(../img/bt-cancel.png);
+}
+.bt-group .bt-withdraw {
+	width: 170px;
+	height: 54px;
+	margin-left: 10px;
+	background-image: url(../img/bt-withdraw.png);
+}
+.bt-group .bt-cancel:hover,
+.bt-group .bt-withdraw:hover {
+	background-position: 0 -54px;
+}
+
+.contact-us {
+	position: relative;
+	height: 54px;
+	margin-top: 40px;
+	background: no-repeat 0 center;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-align: right;
+}
+.contact-us button {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 170px;
+	height: 54px;
+	background: no-repeat 0 0;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.contact-us button:hover {
+	background-position: 0 -54px;
+}
+.costumer-support-page .contact-us {
+	background-image: url(../img/bg-inquiry.png);
+}
+.costumer-support-page .contact-us .bt-inquiry {
+	background-image: url(../img/bt-inquiry.png);
+}
+.products-and-services-page .contact-us {
+	background-image: url(../img/bg-alliance.png);
+}
+.products-and-services-page .contact-us .bt-alliance {
+	width: 195px;
+	background-image: url(../img/bt-alliance.png);
+}
+
+.service {
+	position: relative;
+	width: 296px;
+	height: 594px;
+	border: 1px solid #eaeaea;
+	margin: 31px 0 0 18px;
+	background: #fff;
+}
+.service:nth-child(3n+1) {
+	margin-left: 0;
+}
+.service-title span {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip:rect(1px, 1px, 1px, 1px);
+}
+.service-thumb-holder {
+	width: 200px;
+	height: 200px;
+	padding: 40px 48px;
+	background: #fafafa;
+}
+.service-thumb {
+	width: 200px;
+	height: 200px;
+}
+.service-title {
+	padding: 28px 20px 24px;
+}
+.service-text {
+	padding: 0 20px;
+	line-height: 20px;
+	color: #999;
+}
+.bt-buy {
+	display: block;
+	position: absolute;
+	bottom: 130px;
+	width: 51px;
+	height: 18px;
+	padding: 0 0 0 7px;
+	margin: 24px 20px 0;
+	background: url(../img/bt-buy.png) no-repeat 0 0;
+	line-height: 18px;
+	color: #333;
+}
+.bt-buy:hover {
+	background-position: 0 -18px;
+	color: #ff9f3e;
+}
+.service-company-logo-holder {
+	position: absolute;
+	right: 12px;
+	bottom: 12px;
+}
+
+.account-page .table {
+	margin-top: 30px;
+	border: 1px solid #f0f0f0;
+}
+.account-page .table-header {
+	position: relative;
+	height: 15px;
+	padding: 32px 30px 31px;
+	border-bottom: 1px solid #f0f0f0;
+	background: #fbfbfb;
+}
+.account-page .table-body {
+	padding: 10px 30px 0;
+	background: #fff;
+}
+.account-page .table-label {
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.account-page .table-label {
+	width: 71px;
+	height: 15px;
+	background: no-repeat 0 0;
+}
+.account-page .table-header .table-label {
+	background-image: url(../img/ti-account-table-header-label.png);
+}
+.account-page .table-item-address .table-label {
+	background-image: url(../img/ti-account-table-address-label.png);
+}
+.account-page .table-item-phone .table-label {
+	background-image: url(../img/ti-account-table-phone-label.png);
+}
+.account-page .table-item-password .table-label {
+	background-image: url(../img/ti-account-table-password-label.png);
+}
+.account-page .table-item-coupon .table-label {
+	display: block;
+	width: 138px;
+	margin-bottom: 25px;
+	background-image: url(../img/ti-account-table-coupon-label.png);
+}
+.account-page .table-header .table-data {
+	height: 15px;
+	line-height: 17px;
+	font-size: 12px;
+	color: #333;
+}
+.account-page .table-header .bt-withdraw {
+	position: absolute;
+	top: 32px;
+	right: 30px;
+	text-decoration: underline;
+	color: #999;
+}
+.account-page .table-header .bt-withdraw:hover {
+	color: #666;
+}
+.account-page .table-item {
+	position: relative;
+	height: 15px;
+	padding: 32px 0 31px;
+	border-top: 1px solid #f2f2f2;
+}
+.account-page .table-item .table-data {
+	height: 15px;
+	line-height: 16px;
+	font-size: 12px;
+	color: #666;
+}
+.account-page .table-item-address {
+	border-top: 0;
+}
+.account-page .table-item-coupon {
+	height: auto;
+	padding-bottom: 0;
+	border-top: 0;
+}
+.account-page .bt-change-password {
+	position: absolute;
+	top: 32px;
+	right: 0;
+	text-decoration: underline;
+	color: #999;
+	background: transparent;
+}
+.account-page .bt-change-password:hover {
+	color: #666;
+}
+.account-page .no-coupon {
+	width: 894px;
+	height: 220px;
+	border: 1px solid #e5e5e5;
+	border-radius: 3px;
+	padding-top: 110px;
+}
+.account-page .coupon-empty {
+	padding-top: 77px;
+	font-size: 14px;
+	font-weight: bold;
+	color: #333;
+	background: url(../img/bg-coupon-empty.png) no-repeat center 0;
+	text-align: center;
+}
+
+.account-page .coupons {
+	display: none;
+}
+.has-coupon .account-page .coupons {
+	display: block;
+}
+.has-coupon .account-page .no-coupon {
+	display: none;
+}
+
+.account-page .coupon {
+	margin: 9px 0 0 9px;
+}
+.account-page .coupon:nth-child(1),
+.account-page .coupon:nth-child(2),
+.account-page .coupon:nth-child(3) {
+	margin-top: 0;
+}
+.account-page .coupon:nth-child(3n+1) {
+	margin-left: 0;
+}
+.account-page .coupon-holder {
+	position: relative;
+	width: 260px;
+	height: 141px;
+	padding: 32px 0 0 32px;
+	background: url(../img/bg-coupon.png) no-repeat;
+}
+.account-page .coupon-holder.has-coupon-ribbon {
+	background-image: url(../img/bg-coupon-with-ribbon.png);
+}
+.account-page .coupon-holder.is-placeholder {
+	background-image: url(../img/bg-coupon-placeholder.png);
+}
+.account-page .coupon-holder .coupon-title {
+	font-size: 14px;
+	font-weight: bold;
+	color: #333;
+}
+.account-page .coupon-holder .coupon-payment {
+	padding-top: 15px;
+	line-height: 24px;
+	color: #666;
+}
+.account-page .coupon-holder .coupon-payment span {
+	color: #ddd;
+}
+.account-page .coupon-holder .coupon-status {
+	padding-top: 14px;
+	font-size: 12px;
+}
+.account-page .coupon-holder .coupon-usable {
+	margin-right: 6px;
+	font-weight: bold;
+	color: #333;
+}
+.account-page .coupon-holder .coupon-duration {
+	color: #ff9020;
+}
+.account-page .coupon-content .coupon-usable {
+	width: 71px;
+	padding-left: 0;
+	background: #ff9f3e;
+}
+.account-page .coupon-condition {
+	height: 56px;
+	padding: 30px 0 37px;
+	border-bottom: 1px solid transparent;
+	line-height: 22px;
+	text-align: center;
+}
+.account-page .coupon-condition :nth-child(1) {
+	font-weight: bold;
+	color: #666;
+}
+.account-page .coupon-condition :nth-child(2) {
+	color: #666;
+}
+.account-page .coupon-condition :nth-child(3) {
+	color: #ff9020;
+}
+
+.block-layer {
+	display: none;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1900;
+	background: rgba(0, 0, 0, 0.8);
+}
+.dialog {
+	float: left;
+	position: relative;
+	z-index: 2000;
+	background: #fff;
+	font: 12px/22px '돋움', dotum, gulim, verdana, 'sans-serif';
+	color: #999;
+	text-align: center;
+}
+.dialog-title-bar {
+	height: 69px;
+	border-bottom: 2px solid #ff9f3e;
+}
+.dialog-title {
+	width: 100%;
+	height: 100%;
+	background: no-repeat center center;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.bt-dialog-close {
+	position: absolute;
+	top: 0;
+	left: 100%;
+	width: 30px;
+	height: 30px;
+	margin-left: 24px;
+	background: transparent url(../img/bt-dialog-close.png) no-repeat;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.bt-dialog-close:hover {
+	background-image: url(../img/bt-dialog-close-hover.png);
+}
+
+.dialog-body {
+	position: relative;
+}
+.dialog-content-panel {
+	width: 330px;
+	margin: 0 auto;
+}
+.dialog-content-wide {
+	width: 100%;
+}
+.dialog-control-panel {
+	width: 100%;
+	padding: 43px 0 50px;
+	text-align: center;
+}
+.dialog-control-panel button {
+	width: 145px;
+	height: 44px;
+	margin-left: 10px;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+	background: no-repeat 0 0;
+}
+.dialog-control-panel button:first-child {
+	margin-left: 0;
+}
+.dialog-control-panel button:hover {
+	background-position: 0 -44px;
+}
+.dialog-control-panel button:disabled:hover {
+	background-position: 0 0;
+}
+
+.dialog .tab {
+	width: 50%;
+}
+.dialog .tab button {
+	box-sizing: border-box;
+	width: 100%;
+	height: 48px;
+	background: #fafafa;
+	font-size: 12px;
+	font-weight: bold;
+	color: rgba(51, 51, 51, .45);
+}
+.dialog .tab button:disabled {
+	background: #fff;
+	border-bottom: 0;
+	color: #333;
+}
+.dialog .field {
+	padding-bottom: 10px;
+}
+.dialog .field-auth-number input[type=text] {
+	width: 190px;
+}
+
+.dialog .bt-send-number {
+	width: 130px;
+	height: 40px;
+	border: 0;
+	margin-left: 10px;
+	background: url(../img/bt-dialog-send-number.png) no-repeat 0 0;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.dialog .bt-send-number:hover {
+	background-position: 0 -40px;
+}
+.dialog .remained-time {
+	display: none;
+	margin-top: 7px;
+	line-height: 11px;
+	font-size: 11px;
+	color: #767676;
+	text-align: right;
+}
+.dialog .remained-time strong {
+	color: #ff9f3e;
+	font-weight: normal;
+}
+.dialog .result {
+	color: #333;
+}
+
+.dialog-control-panel .bt-confirm {
+	background-image: url(../img/bt-dialog-confirm.png);
+}
+.dialog-control-panel .bt-find-password {
+	background-image: url(../img/bt-dialog-find-password.png);
+}
+.dialog-control-panel .bt-retry-find-id {
+	background-image: url(../img/bt-dialog-retry-find-id.png);
+}
+.dialog-control-panel .bt-log-in {
+	background-image: url(../img/bt-dialog-log-in.png);
+}
+.dialog-control-panel .bt-log-in:hover {
+	background-position: 0 -44px;
+}
+.dialog-control-panel .bt-next {
+	background-image: url(../img/bt-dialog-next.png);
+}
+.dialog-control-panel .bt-prev {
+	background-image: url(../img/bt-dialog-prev.png);
+}
+.dialog-control-panel .bt-cancel {
+	background-image: url(../img/bt-dialog-cancel.png);
+}
+.dialog-control-panel .bt-save {
+	background-image: url(../img/bt-dialog-save.png);
+}
+
+.dialog-video {
+	width: 884px;
+	height: 528px;
+}
+.dialog-video .dialog-content-panel {
+	margin: 0;
+}
+.video-viewer {
+	width: 884px;
+	height: 528px;
+}
+
+.dialog-find-id-form {
+	width: 500px;
+}
+.dialog-find-id-form .dialog-title {
+	background-image: url(../img/ti-dialog-find-id-password.png);
+}
+.dialog-find-id-form .bt-find-password {
+	border-bottom: 1px solid #efefef;
+	border-left: 1px solid #efefef;
+}
+.dialog-find-id-form .description {
+	margin: 38px 0 24px;
+}
+.dialog-find-id-form .dialog-control-panel {
+	padding-top: 55px;
+}
+
+.dialog-find-id-success {
+	width: 500px;
+}
+.dialog-find-id-success .dialog-title{
+	background-image: url(../img/ti-dialog-find-id-password.png);
+}
+.dialog-find-id-success .result {
+	padding: 79px 0 35px;
+	color: #333;
+}
+.dialog-find-id-success .ids {
+	height: 150px;
+	overflow: auto;
+}
+.dialog-find-id-success .ids li {
+	height: 12px;
+	line-height: 12px;
+	font-size: 12px;
+	color: #888;
+	margin-top: 24px;
+}
+.dialog-find-id-success .ids li:first-child {
+	margin-top: 0;
+}
+.dialog-find-id-success .dialog-control-panel {
+	padding-top: 53px;
+}
+.dialog-find-id-failure {
+	width: 380px;
+}
+.dialog-find-id-failure .dialog-title{
+	background-image: url(../img/ti-dialog-find-id-password.png);
+}
+.dialog-find-id-failure .dialog-control-panel {
+	padding: 60px 0 37px;
+}
+.dialog-find-id-failure .result {
+	padding-top: 143px;
+	margin-top: 40px;
+	background: url(../img/bg-dialog-id-not-found.png) no-repeat center 0;
+	font-size: 14px;
+	line-height: 22px;
+}
+
+.dialog-find-password-form {
+	width: 500px;
+}
+.dialog-find-password-form .dialog-title{
+	background-image: url(../img/ti-dialog-find-id-password.png);
+}
+.dialog-find-password-form .bt-find-id {
+	border-right: 1px solid #efefef;
+	border-bottom: 1px solid #efefef;
+}
+.dialog-find-password-form .description {
+	margin: 38px 0 24px;
+}
+.dialog-find-password-form .dialog-control-panel {
+	padding-top: 74px;
+}
+
+.dialog-find-password-success {
+	width: 380px;
+}
+.dialog-find-password-success .dialog-title{
+	background-image: url(../img/ti-dialog-find-password-success.png);
+}
+.dialog-find-password-success .dialog-control-panel {
+	padding-bottom: 37px;
+}
+.dialog-find-password-success .result {
+	height: 62px;
+	padding-top: 141px;
+	margin-top: 40px;
+	background: url(../img/bg-dialog-find-password-success.png) no-repeat center 0;
+	font-size: 12px;
+	line-height: 25px;
+	color: #999;
+}
+.dialog-find-password-success .result strong {
+	color: #333;
+	font-size: 14px;
+}
+
+.sign-up-progress {
+	width: 330px;
+	height: 34px;
+	margin-top: 33px;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+	background: url(../img/bg-dailog-sign-up-progress.png) no-repeat 0 0;
+}
+
+.dialog-sign-up-step1 {
+	width: 536px;
+}
+.dialog-sign-up-step1 .dialog-title{
+	background-image: url(../img/ti-dialog-sign-up.png);
+}
+.dialog-sign-up-step1 .description {
+	padding: 38px 0 35px;
+}
+.dialog-sign-up-step1 .dialog-terms-list {
+	width: 436px;
+	border: 1px solid #eee;
+	border-bottom: 0;
+	background: #fafafa;
+}
+.dialog-sign-up-step1 .field {
+	position: relative;
+	height: 24px;
+	padding: 12px 0 12px 17px;
+	border-bottom: 1px solid #eee;
+	text-align: left;
+}
+.dialog-sign-up-step1 label {
+	font-weight: bold;
+	color: #666;
+}
+.dialog-sign-up-step1 .bt-show-term {
+	display: block;
+	position: absolute;
+	top: 15px;
+	right: 17px;
+	width: 48px;
+	height: 17px;
+	line-height: 17px;
+	text-decoration: underline;
+	color: #9b9b9b;
+	font-size: 11px;
+}
+.dialog-sign-up-step1 .bt-show-term:hover {
+	color: #828282;
+}
+.dialog-sign-up-step1 .dialog-control-panel {
+	padding-top: 53px;
+}
+
+.dialog-sign-up-step2 {
+	width: 500px;
+}
+.dialog-sign-up-step2 .dialog-title{
+	background-image: url(../img/ti-dialog-sign-up.png);
+}
+.dialog-sign-up-step2 .sign-up-progress {
+	background-position: 0 -34px;
+}
+.dialog-sign-up-step2 .description {
+	padding: 38px 0 36px;
+}
+
+.dialog-sign-up-step3 {
+	width: 500px;
+}
+.dialog-sign-up-step3 .dialog-title{
+	background-image: url(../img/ti-dialog-sign-up.png);
+}
+.dialog-sign-up-step3 .sign-up-progress {
+	background-position: 0 -68px;
+}
+.dialog-sign-up-step3 .description {
+	padding: 38px 0 35px;
+}
+
+.dialog-sign-up-success {
+	width: 380px;
+}
+.dialog-sign-up-success .dialog-title{
+	background-image: url(../img/ti-dialog-sign-up-success.png);
+}
+.dialog-sign-up-success .dialog-control-panel {
+	padding-bottom: 37px;
+}
+.dialog-sign-up-success .result {
+	height: 62px;
+	padding-top: 140px;
+	margin-top: 40px;
+	background: url(../img/bg-dialog-sign-up-success.png) no-repeat center 0;
+	font-size: 12px;
+	line-height: 25px;
+	color: #999;
+}
+.dialog-sign-up-success .result strong {
+	color: #333;
+	font-size: 14px;
+}
+
+.dialog-log-in {
+	width: 380px;
+}
+.dialog-log-in .dialog-body {
+	padding: 63px 0 43px;
+}
+.dialog-log-in .description {
+	width: 236px;
+	height: 78px;
+	margin: 0 auto 43px;
+	background: url(../img/bg-dialog-log-in-description.png) no-repeat;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.dialog-log-in .dialog-content-panel {
+	width: 230px;
+}
+.dialog-log-in .dialog-control-panel {
+	padding: 25px 0;
+}
+.dialog-log-in .dialog-content-bottom {
+	width: 100%;
+	height: 25px;
+}
+.dialog-log-in .bt-sign-up,
+.dialog-log-in .bt-sign-up:hover {
+	vertical-align: top;
+	width: 57px;
+	height: 25px;
+	background: url(../img/bt-dialog-sign-up.png) no-repeat;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.dialog-log-in .dialog-log-in-separator {
+	display: inline-block;
+	width: 12px;
+	height: 25px;
+	background: url(../img/bg-dialog-log-in-separetor.png) no-repeat;
+}
+.dialog-log-in .bt-find-id-and-password {
+	vertical-align: top;
+	width: 124px;
+	height: 25px;
+	background: url(../img/bt-dialog-find-id-and-password.png) no-repeat;
+	text-indent: 200%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.dialog-log-in .bt-log-in {
+	width: 230px;
+	background-image: url(../img/bt-dialog-log-in-wide.png);
+}
+
+.dialog-inquiry {
+	width: 600px;
+}
+.dialog-inquiry .dialog-title{
+	background-image: url(../img/ti-dialog-inquiry.png);
+}
+.dialog-inquiry .dialog-content-panel {
+	width: 500px;
+}
+.dialog-inquiry .description {
+	height: 76px;
+	padding-top: 30px;
+}
+.dialog-inquiry .field {
+	padding: 10px 10px 10px 0;
+	border-top: 1px solid #e1e1e1;
+}
+.dialog-inquiry .field:last-child {
+	border-bottom: 1px solid #e1e1e1;
+}
+.dialog-inquiry label {
+	width: 168px;
+	height: 40px;
+	line-height: 40px;
+	color: #333;
+	text-align: left;
+}
+.dialog-inquiry .edit {
+	width: 322px;
+}
+.dialog-inquiry .field-text {
+	height: auto;
+}
+.dialog-inquiry textarea {
+	height: 120px;
+}
+.dialog-inquiry .field-conditions {
+	height: auto;
+	padding: 31px 0 0;
+	text-align: left;
+}
+.dialog-inquiry .field-agree {
+	padding: 28px 0 10px;
+	border-top: 0;
+	text-align: left;
+}
+.dialog-inquiry .dialog-control-panel {
+	padding-top: 50px;
+}
+
+.dialog-change-password {
+	width: 500px;
+}
+.dialog-change-password .dialog-title{
+	background-image: url(../img/ti-dialog-change-password.png);
+}
+.dialog-change-password legend {
+	width: 340px;
+	padding: 0;
+	margin: 0 auto 5px;
+	color: #333;
+	text-align: left;
+}
+.dialog-change-password .dialog-content-panel,
+.dialog-change-password .field,
+.dialog-change-password .edit {
+	width: 340px;
+}
+.dialog-change-password .current-password-fieldset {
+	margin-top: 35px;
+}
+.dialog-change-password .new-password-fieldset {
+	margin-top: 21px;
+}
+
+.dialog-withdraw-confirm {
+	width: 380px;
+}
+.dialog-withdraw-confirm .dialog-title{
+	background-image: url(../img/ti-dialog-withdraw-confirm.png);
+}
+.dialog-withdraw-confirm .dialog-control-panel {
+	padding-bottom: 37px;
+}
+.dialog-withdraw-confirm .description {
+	padding-top: 168px;
+	margin: 40px auto 13px;
+	background: url(../img/bg-dialog-withdraw-confirm.png) no-repeat center 0;
+}
+.dialog-withdraw-confirm .description strong {
+	font-size: 14px;
+	color: #333;
+}
+
+.dialog-withdraw-success {
+	width: 380px;
+}
+.dialog-withdraw-success .dialog-title{
+	background-image: url(../img/ti-dialog-withdraw-success.png);
+}
+.dialog-withdraw-success .dialog-control-panel {
+	padding-bottom: 37px;
+}
+.dialog-withdraw-success .result {
+	height: 62px;
+	padding-top: 140px;
+	margin-top: 40px;
+	background: url(../img/bg-dialog-withdraw-confirm.png) no-repeat center 0;
+	color: #999;
+	line-height: 24px;
+}
+.dialog-withdraw-success .result strong {
+	font-size: 14px;
+	color: #333;
+}
+
+.term-holder .term-signature {
+	padding:20px 0;
+	text-align:center;
+}
+.term-holder .term-external {
+	text-decoration:underline;
+}
+.term-holder .preambles,
+.term-holder .term-end {
+	padding: 16px 15px;
+	color: #666;
+}
+.term-holder .term-end {
+	padding-top:0;
+}
+.term-holder .article {
+	margin-bottom: 18px;
+}
+.term-holder .article-title {
+	margin-bottom: 9px;
+	color: #666;
+	font-size: 15px;
+	font-weight: bold;
+}
+.term-holder .article-statement {
+	margin-bottom: 9px;
+}
+.term-holder .chapter {
+	padding: 1em 0;
+}
+.term-holder .chapter-title {
+	margin-bottom: 10px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 18px;
+	line-height: 24px;
+}
+.term-holder .paragraphs {
+	padding-left: 1.5em;
+	margin-bottom: 10px;
+}
+.term-holder .sub-paragraph-item {
+	padding-left: 1em;
+	margin-bottom: 10px;
+}
+.term-holder .sub-paragraph-list {
+	margin-top: 10px;
+}
+.term-holder .paragraph,
+.term-holder .sub-paragraph {
+	margin-bottom: 10px;
+}
+.term-holder .paragraph-number,
+.term-holder .sub-paragraph-number {
+	margin-left:-1.5em;
+}
+.term-holder .term-remark {
+	color: #ff0000;
+}
+.term-holder .term-attached-table {
+	border: 1px solid #333;
+	border-right: 0;
+	border-bottom: 0;
+}
+.term-holder .term-attached-table th,
+.term-holder .term-attached-table td {
+	min-width: 5em;
+	padding: .5em;
+	border: 1px solid #333;
+	border-top: 0;
+	border-left: 0;
+	text-align: center;
+	font-size: 12px;
+	color: #666;
+}
+.term-holder .term-attached-table th {
+	background: #d9d9d9;
+	color: #333;
+}

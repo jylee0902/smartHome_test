@@ -1,0 +1,979 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<title>Home - Smart[Home]</title>
+<meta name="viewport" content="width=1349px,user-scalable=no">
+<link rel="stylesheet" type="text/css" href="../css/base.css">
+<link rel="stylesheet" type="text/css" href="../css/smarthomeui.css">
+<link rel="stylesheet" type="text/css" href="../css/showroom.css">
+<script type="text/javascript" src="../js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="../js/smarthomeui.js"></script>
+<script type="text/javascript" src="../js/showroom.js"></script>
+<script id="dialog-template-video" type="text/x-dialog-template">
+	<div class="dialog dialog-video">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<iframe class="video-viewer" src="https://www.youtube.com/embed/QWNvC0GytDY?autoplay=1" allowfullscreen></iframe>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-find-id-form" type="text/x-dialog-template">
+	<div class="dialog dialog-find-id-form">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">아이디 / 비밀번호 찾기</p>
+		</div>
+		<div class="dialog-body">
+			<ul class="tabs h-bar">
+				<li class="tab h-item"><button type="button" class="bt-find-id" disabled>아이디 찾기</button></li>
+				<li class="tab h-item"><button type="button" class="bt-find-password">비밀번호 찾기</button></li>
+			</ul>
+			<div class="dialog-content-panel">
+				<p class="description">
+					휴대폰 번호를 입력하신 후 다음 버튼을 누르시면,<br>
+					인증번호가 전송됩니다.
+				</p>
+			</div>
+			<form>
+				<fieldset>
+					<legend>인증번호 요청</legend>
+					<div class="dialog-content-panel">
+						<div class="field field-auth-number">
+							<input type="text" class="edit" placeholder="휴대폰 번호(-제외)">
+							<input type="submit" class="bt-send-number" value="인증번호 전송">
+							<p class="err-msg"></p>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<form>
+				<fieldset>
+					<legend>인증번호 전송</legend>
+					<div class="dialog-content-panel">
+						<div class="field">
+							<input type="text" class="edit" placeholder="인증번호 6자리">
+							<p class="err-msg"></p>
+							<p class="remained-time">남은 시간 <strong>00:00</strong></p>
+						</div>
+					</div>
+					<div class="dialog-control-panel">
+						<button type="submit" class="bt-confirm">확인</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-find-id-success" type="text/x-dialog-template">
+	<div class="dialog dialog-find-id-success">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">아이디 / 비밀번호 찾기</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<p class="result"><strong>회원님의 아이디는 아래와 같습니다.</strong></p>
+				<ul class="ids"></ul>
+			</div>
+			<div class="dialog-control-panel">
+				<button type="button" class="bt-find-password">비밀번호 찾기</button>
+				<button type="button" class="bt-log-in">로그인 하기</button>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-find-id-failure" type="text/x-dialog-template">
+	<div class="dialog dialog-find-id-failure">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">회원 탈퇴</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<p class="result">
+					<strong>입력하신 휴대폰 번호에 해당하는<br>아이디를 찾을 수 없습니다.</strong>
+				</p>
+			</div>
+			<div class="dialog-control-panel">
+				<button type="button" class="bt-find-password">비밀번호 찾기</button>
+				<button type="button" class="bt-retry-find-id">확인</button>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-find-password-form" type="text/x-dialog-template">
+	<div class="dialog dialog-find-password-form">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">아이디 / 비밀번호 찾기</p>
+		</div>
+		<div class="dialog-body">
+			<ul class="tabs h-bar">
+				<li class="tab h-item"><button type="button" class="bt-find-id">아이디 찾기</button></li>
+				<li class="tab h-item"><button type="button" class="bt-find-password" disabled>비밀번호 찾기</button></li>
+			</ul>
+			<div class="dialog-content-panel dialog-content-wide">
+				<p class="description">
+					회원정보에 등록된 아이디 휴대폰 번호 입력을 통해 본인 확인 후<br>
+					임시 비밀번호를 발급 받으실 수 있습니다.
+				</p>
+			</div>
+			<form>
+				<fieldset>
+					<legend>인증번호 요청</legend>
+					<div class="dialog-content-panel">
+						<div class="field">
+							<input type="text" class="edit" placeholder="아이디(이메일)">
+							<p class="err-msg"></p>
+						</div>
+						<div class="field field-auth-number">
+							<input type="text" class="edit" placeholder="휴대폰 번호(-제외)">
+							<input type="submit" class="bt-send-number" value="인증번호 전송">
+							<p class="err-msg"></p>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<form>
+				<fieldset>
+					<legend>인증번호 전송</legend>
+					<div class="dialog-content-panel">
+						<div class="field">
+							<input type="text" class="edit" placeholder="인증번호 6자리">
+							<p class="err-msg"></p>
+							<p class="remained-time">남은 시간 <strong>00:00</strong></p>
+						</div>
+					</div>
+					<div class="dialog-control-panel">
+						<button type="submit" class="bt-confirm">확인</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-find-password-success" type="text/x-dialog-template">
+	<div class="dialog dialog-find-password-success">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">임시 비밀번호 발송 완료</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel dialog-content-wide">
+				<p class="result">
+					임시 비밀번호를 아래의 메일 주소로 발송하였습니다.
+					<strong>sarthome124@smart.com</strong>
+				</p>
+			</div>
+			<div class="dialog-control-panel">
+				<button type="button" class="bt-confirm">확인</button>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-sign-up-step1" type="text/x-dialog-template">
+	<div class="dialog dialog-sign-up-step1">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">회원 가입</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<div class="sign-up-progress">약관 동의</div>
+			</div>
+			<div class="dialog-content-panel dialog-content-wide">
+				<p class="description">서비스 이용 약관과 개인정보 수집 및 이용에 동의가 필요합니다.</p>
+			</div>
+			<form>
+				<fieldset>
+					<legend>약관동의</legend>
+					<ul class="dialog-content-panel dialog-terms-list">
+						<li class="field">
+							<input id="agree-service" type="checkbox" value="1">
+							<label for="agree-service">서비스 이용 약관 동의</label>
+							<a class="bt-show-term" href="terms-and-conditions.html#service" target="_blank">전문보기</a>
+						</li>
+						<li class="field">
+							<input id="agree-geolocation" type="checkbox" value="1">
+							<label for="agree-geolocation">개인위치정보 수집 이용 및 위치기반서비스 이용 동의</label>
+							<a class="bt-show-term" href="terms-and-conditions.html#geolocation" target="_blank">전문보기</a>
+						</li>
+						<li class="field">
+							<input id="agree-privacy" type="checkbox" value="1">
+							<label for="agree-privacy">개인정보 수집 및 이용 동의</label>
+							<a class="bt-show-term" href="terms-and-conditions.html#privacy" target="_blank">전문보기</a>
+						</li>
+						<li class="field">
+							<input id="agree-children" type="checkbox" value="1">
+							<label for="agree-children">만 14세 이상 서비스 이용 동의</label>
+							<a class="bt-show-term" href="terms-and-conditions.html#age14" target="_blank">전문보기</a>
+						</li>
+						<li class="field">
+							<input id="agree-all" type="checkbox" value="1">
+							<label for="agree-all">위의 약관에 전체 동의</label>
+						</li>
+					</ul>
+					<div class="dialog-control-panel">
+						<button type="submit" class="bt-next">다음</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-sign-up-step2" type="text/x-dialog-template">
+	<div class="dialog dialog-sign-up-step2">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">회원 가입</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<div class="sign-up-progress">본인 인증</div>
+			</div>
+			<div class="dialog-content-panel dialog-content-wide">
+				<p class="description">휴대폰 번호를 입력하신 후 인증번호 전송 버튼을 눌러 주세요.</p>
+			</div>
+			<form>
+				<fieldset>
+					<legend>인증번호 요청</legend>
+					<div class="dialog-content-panel">
+						<div class="field field-auth-number">
+							<input type="text" class="edit" placeholder="휴대폰 번호(-제외)">
+							<input type="submit" class="bt-send-number" value="인증번호 전송">
+							<p class="err-msg"></p>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+			<form>
+				<fieldset>
+					<legend>인증번호 전송</legend>
+					<div class="dialog-content-panel">
+						<div class="field">
+							<input type="text" class="edit" placeholder="인증번호 6자리">
+							<p class="err-msg"></p>
+							<p class="remained-time">남은 시간 <strong>00:00</strong></p>
+						</div>
+					</div>
+					<div class="dialog-control-panel">
+						<button type="button" class="bt-prev">이전</button>
+						<button type="submit" class="bt-next">다음</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-sign-up-step3" type="text/x-dialog-template">
+	<div class="dialog dialog-sign-up-step3">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">회원 가입</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<div class="sign-up-progress">정보 입력</div>
+				<p class="description">사용자 정보를 입력해주세요.</p>
+			</div>
+			<form>
+				<fieldset>
+					<legend>사용자 정보</legend>
+					<div class="dialog-content-panel">
+						<div class="field">
+							<input type="text" class="edit" placeholder="이름 (한글, 영문, 12자 이내)">
+							<p class="err-msg"></p>
+						</div>
+						<div class="field">
+							<input type="text" class="edit" placeholder="사용할 아이디 (이메일)">
+							<p class="err-msg"></p>
+						</div>
+						<div class="field">
+							<input type="password" class="edit" placeholder="비밀번호 (대소문자 구분 영문, 숫자 포함 8자 이상)">
+							<p class="err-msg"></p>
+						</div>
+						<div class="field">
+							<input type="password" class="edit" placeholder="비밀번호 재입력">
+							<p class="err-msg"></p>
+						</div>
+					</div>
+					<div class="dialog-control-panel">
+						<button type="button" class="bt-prev">이전</button>
+						<button type="submit" class="bt-next">다음</button>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-sign-up-success" type="text/x-dialog-template">
+	<div class="dialog dialog-sign-up-success">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">회원 가입 완료</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<p class="result">
+					<strong>회원 가입이 완료 되었습니다.</strong><br>
+					스마트한 우리집을 경험해보세요.
+				</p>
+			</div>
+			<div class="dialog-control-panel">
+				<button type="button" class="bt-confirm">확인</button>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-log-in" type="text/x-dialog-template">
+	<div class="dialog dialog-log-in">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-body">
+			<div class="dialog-content-panel dialog-content-wide">
+				<p class="description">
+					당신의 집이 더 스마트해지도록 로그인을 해주세요
+				</p>
+			</div>
+			<form>
+				<fieldset>
+					<legend>로그인</legend>
+					<div class="dialog-content-panel">
+						<div class="field">
+							<input type="text" class="edit" placeholder="스마트홈 계정 (이메일)">
+							<p class="err-msg"></p>
+						</div>
+						<div class="field">
+							<input type="password" class="edit" placeholder="비밀번호">
+							<p class="err-msg"></p>
+						</div>
+					</div>
+					<div class="dialog-control-panel">
+						<button type="submit" class="bt-log-in">확인</button>
+					</div>
+				</fieldset>
+			</form>
+			<div class="dialog-content-panel dialog-content-bottom">
+				<button type="button" class="bt-sign-up">회원가입</button>
+				<span class="dialog-log-in-separator"></span>
+				<button type="button" class="bt-find-id-and-password">아이디/비밀번호 찾기</button>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-inquiry" type="text/x-dialog-template">
+	<div class="dialog dialog-inquiry">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">이메일 문의</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<p class="description">
+					이용하시면서 불편한 상황이나 개선점이 있다면 Smart[Home] 고객센터로<br>
+					언제든지 알려주세요. 이메일을 함께 남겨주시면, 답변을 받아 보실 수 있습니다.
+				</p>
+			</div>
+			<form>
+				<fieldset>
+					<legend>이메일 문의</legend>
+					<div class="dialog-content-panel">
+						<div class="field h-bar">
+							<label for="inquirer-email" class="h-item">연락받으실 이메일 주소</label>
+							<div class="sub-field h-item">
+								<input id="inquirer-email" class="edit" type="text" placeholder="이메일을 입력해주세요">
+								<p class="err-msg"></p>
+							</div>
+						</div>
+						<div class="field h-bar">
+							<label for="inquirer-phone" class="h-item">연락받으실 전화번호</label>
+							<div class="sub-field h-item">
+								<input id="inquirer-phone" class="edit" type="text" placeholder="연락 받을 전화번호를 입력해주세요">
+								<p class="err-msg"></p>
+							</div>
+						</div>
+						<div class="field field-text h-bar">
+							<label for="inquiry-text" class="h-item">문의하실 내용</label>
+							<div class="sub-field h-item">
+								<textarea id="inquiry-text" class="edit text" ></textarea>
+								<p class="err-msg"></p>
+							</div>
+						</div>
+					</div>
+				</fieldset>
+				<div class="dialog-control-panel">
+					<button type="submit" class="bt-confirm">확인</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-change-password" type="text/x-dialog-template">
+	<div class="dialog dialog-change-password">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">비밀번호 변경</p>
+		</div>
+		<div class="dialog-body">
+			<form>
+				<fieldset class="current-password-fieldset">
+					<legend class="displayed">현재 비밀번호</legend>
+					<div class="dialog-content-panel">
+						<div class="field">
+							<input type="password" class="edit" placeholder="현재 비밀번호">
+							<p class="err-msg"></p>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="new-password-fieldset">
+					<legend class="displayed">새 비밀번호</legend>
+					<div class="dialog-content-panel">
+						<div class="field">
+							<input type="password" class="edit" placeholder="새 비밀번호 (대소문자 구분 영문, 숫자 포함 8자 이상)">
+							<p class="err-msg"></p>
+						</div>
+						<div class="field">
+							<input type="password" class="edit" placeholder="비밀번호 재입력">
+							<p class="err-msg"></p>
+						</div>
+					</div>
+				</fieldset>
+				<div class="dialog-control-panel">
+					<button type="button" class="bt-cancel">취소</button>
+					<button type="submit" class="bt-save">저장</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-withdraw-confirm" type="text/x-dialog-template">
+	<div class="dialog dialog-withdraw-confirm">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">회원 탈퇴</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<p class="description">
+					<strong>탈퇴하시겠습니까?</strong>
+				</p>
+			</div>
+			<div class="dialog-control-panel">
+				<button type="button" class="bt-cancel">취소</button>
+				<button type="button" class="bt-confirm">확인</button>
+			</div>
+		</div>
+	</div>
+</script>
+<script id="dialog-template-withdraw-success" type="text/x-dialog-template">
+	<div class="dialog dialog-withdraw-success">
+		<button class="bt-dialog-close" type="button">Close</button>
+		<div class="dialog-title-bar">
+			<p class="dialog-title">회원 탈퇴 완료</p>
+		</div>
+		<div class="dialog-body">
+			<div class="dialog-content-panel">
+				<p class="result">
+					<strong>회원탈퇴가 완료되었습니다.</strong><br>
+					더 좋아진 Smart[Home]으로 다시 만나요.
+				</p>
+			</div>
+			<div class="dialog-control-panel">
+				<button type="button" class="bt-confirm">확인</button>
+			</div>
+		</div>
+	</div>
+</script>
+<script type="text/javascript">
+	jQuery(function($) {
+
+		$(window).on('swipe', function() {
+			alert('dddd');
+		});
+		/**
+		 * 시작시 SmartHomeUI의 init()을 실행해야 합니다.
+		 * home의 경우 Showroom이라는 객체를 사용하므로
+		 * 이를 init()의 parameter로 전달합니다.
+		 * 편의상 smartHomeUI는 U, Showroom은 S라는 local variable에 각각 할당했습니다.
+		 * */
+		var S = Showroom, U = SmartHomeUI.init(S);
+
+		/**
+		 * [회원가입 Dialog]
+		 * GNB의 회원가입을 선택하면 나타나는 Dialog 입니다.
+		 *
+		 * 이를 통해 전반적인 Dialog 사용법을 설명합니다.
+		 * .btn-signup을 클릭하면 signUp()을 호출하는 것을 시작으로 예제를 구성했습니다.
+		 */
+		$('.bt-sign-up').on('click', function() {
+			signUp(true);
+		});
+
+		function signUp() {
+
+			// 회원가입을 시작합니다.
+			goStep1();
+
+			function goStep1() {
+
+				/**
+				 * Dialog를 여는 함수입니다.
+				 * templateId는 필수, onOpen과 onClose는 선택입니다.
+				 */
+				U.dialog({
+					/**
+					 * 위 text/x-dialog-template를 type으로 가지는 script element의 id입니다.
+					 * 필요한 template을 찾아 이 함수를 호출하면 Dialog가 화면에 나타납니다.
+					 * */
+					templateId: 'dialog-template-sign-up-step1',
+					/**
+					 * Dialog가 생성되고 DOM에 추가된 후, 사용자에게 보여지기 전에 호출됩니다.
+					 * context로 .dialog의 DOM Element가 전달됩니다.
+					 * 이를 통해 내부에 event listener 등을 추가할 수 있습니다.
+					 * */
+					onOpen: function(context) {
+
+						$(context).find('form').first().on('submit', function() {
+
+							/**
+							 * 필요한 validation check를 할 수 있습니다.
+							 * 또 필요한 테이터를 다른 곳에 저장해 둘 수 있습니다.
+							 */
+
+								// 두벉째 단계 Dialog로 진입합니다.
+							goStep2();
+
+							return false;
+						});
+					},
+					/**
+					 * Dialog가 사용자에게 사라지기 전에 호출됩니다.
+					 * context로 .dialog의 DOM Element가 전달됩니다.
+					 * 이를 통해 Dialog가 닫히기 전에 필요한 동작을 할 수 있습니다.
+					 * 이 함수가 실행되었다고 해서, 실제로 Dialog가 닫히지는 않습니다.
+					 * 실제로 Dialog를 닫으려면 콜백함수인 finish 호출합니다.
+					 * onClose를 생략했다면 바로 Dialog를 닫습니다.
+					 * */
+					onClose: function(context, finish) {
+
+						// 여기서는 특별한 처리 없이 바로 finish()를 호출합니다.
+						finish();
+					}
+				});
+			}
+
+			function goStep2() {
+
+				/**
+				 * Dialog가 이미 존재하는 경우 다시 U.dialog()를 호출하면
+				 * Block Layer는 유지된 채 Dialog가 교체됩니다.
+				 * 이때 이미 존재하던 Dialog가 닫히면서 onClose가 호출되는데,
+				 * 두번째 parameter인 finish를 호출하면 이제 Dialog를 제거하는 것이 아니라
+				 * 새로운 Dialog를 띄우게 됩니다. 이때 새 Dialog의 onOpen도 호출됩니다.
+				 */
+				U.dialog({
+					templateId: 'dialog-template-sign-up-step2',
+					onOpen: function(context) {
+
+						var $context = $(context);
+
+					U.validate($context.find('form').first().find('input').first());
+
+						var $form = $context.find('form').last().on('submit', function() {
+
+							// 세벉째 단계 Dialog로 진입합니다.
+							goStep3();
+							return false;
+						});
+
+						/**
+						 * input 등 element들의 validation check를 할 수 있습니다.
+						 * 입력값에 오류가 있다면 U.invalidate()을 호출합니다.
+						 * 첫번째 parameter는 당해 input 등 (DOM/JQuery) element이고,
+						 * 두번째 parameter는 오류 메시지 입니다.
+						 * 오류표시를 없애고 싶다면 (즉 오류가 정정되었다면)
+						 * 두번째 parameter를 생략하고 호출하면 됩니다.
+						 */
+						U.invalidate($form.find('input').first(), '테스트 에러 메시지');
+
+						setTimeout(function() {
+							// 오류메시지가 없으면 정상으로 되돌립니다.
+							U.invalidate($form.find('input').first());
+						}, 1500);
+
+						$context.find('.bt-prev').on('click', function() {
+
+							// 이전단계로 이동합니다.
+							goStep1();
+							return false;
+						});
+					}
+				});
+			}
+
+			function goStep3() {
+				U.dialog({
+					templateId: 'dialog-template-sign-up-step3',
+					onOpen: function(context) {
+						var $context = $(context);
+						$context.find('form').last().on('submit', function() {
+
+							/**
+							 * 최종 성공 화면으로 진입합니다.
+							 * 실패했을 때는 dialog-temlate-signup-failure를
+							 * templateId로 사용하시면 됩니다.
+							 */
+							goFinish();
+							return false;
+						});
+
+						$context.find('.bt-prev').on('click', function() {
+
+							// 이전단계로 이동합니다.
+							goStep2();
+							return false;
+						});
+					}
+				});
+			}
+
+			function goFinish() {
+				U.dialog({
+					templateId: 'dialog-template-sign-up-success',
+					onOpen: function(context) {
+						$(context).find('.bt-confirm').on('click', function() {
+
+							/**
+							 * Dialog를 닫기 위해서는 U.dialog()를 parameter 없이 호출합니다.
+							 * 이 때에도 Dialog가 닫히기 전에 onClose가 호출됩니다.
+							 */
+							U.dialog();
+							return false;
+						});
+					},
+					onClose: function(context, finish) {
+
+						finish();
+					}
+				});
+			}
+
+			return false;
+		}
+
+		$('.bt-log-in').on('click', login);
+
+		function login() {
+			/**
+			 * [로그인 Dialog]
+			 */
+			U.dialog({
+				templateId: 'dialog-template-log-in',
+				onOpen: function(context) {
+					var $context = $(context);
+
+					$context.find('.bt-sign-up').on('click', function() {
+						signUp(true);
+					});
+
+					$context.find('.bt-find-id-and-password').on('click', function() {
+						findIdOrPassword('id');
+					});
+				}
+			});
+		}
+
+		function findIdOrPassword(target) {
+
+			var interval = null;
+
+			switch (target) {
+			case 'id':
+				U.dialog({
+					templateId: 'dialog-template-find-id-form',
+					onOpen: function(context) {
+						var $context = $(context);
+
+						/**
+						 *  남은 시간을 표시하는 예제입니다.
+						 *  편의 상 현재 분/초를 zero-leading없이 표시합니다.
+						 */
+						var timeDisplay = U.getRemainedTimeDisplay($context);
+						var date = new Date();
+
+						timeDisplay.show().setTime(date.getMinutes() + ':' + date.getSeconds());
+
+						interval = setInterval(function() {
+							var date = new Date();
+							timeDisplay.setTime(date.getMinutes() + ':' + date.getSeconds());
+							date = null;
+						}, 1000);
+						//-- 남은 시간 표시 예제 종료
+
+						$context.find('.bt-find-password').on('click', function() {
+							findIdOrPassword('password');
+						});
+
+						$context.find('form').last().on('submit', function() {
+
+							/**
+							 * 성공했을 때의 template이며 실패했을 때는
+							 * dialog-template-find-id-failure를 사용합니다.
+							 */
+							U.dialog({
+								templateId: 'dialog-template-find-id-success',
+								onOpen: function(context) {
+									var $context = $(context);
+
+									// 서버로부터 가져온 email 목록을 추가합니다.
+									var results = [
+										'aaaa@bbbbb.com',
+										'cccc@ddddd.com',
+										'eeee@fffff.com',
+										'gggg@hhhhh.com'
+									];
+
+									results = $.map(results, function(v) {
+										return '<li>' + v + '</li>';
+									});
+
+									$context.find('.ids').html(results.join(''));
+									//-- END
+
+									$context.find('.bt-find-password').on('click', function() {
+										findIdOrPassword('password');
+									});
+
+									$context.find('.bt-log-in').on('click', login);
+								}
+							});
+						});
+					},
+					onClose: function(context, finish) {
+						if (interval) {
+							clearInterval(interval);
+							interval = null;
+						}
+						finish();
+					}
+				});
+				break;
+			case 'password':
+				U.dialog({
+					templateId: 'dialog-template-find-password-form',
+					onOpen: function(context) {
+						var $context = $(context);
+
+						$context.find('.bt-find-id').on('click', function() {
+							findIdOrPassword('id');
+						});
+
+						$context.find('form').last().on('submit', function() {
+
+							/**
+							 * [임시 암호 메일 발송 완료 Dialog]
+							 */
+							U.dialog({
+								templateId: 'dialog-template-find-password-success',
+								onOpen: function(context) {
+									var $context = $(context);
+
+									$context.find('.bt-confirm').on('click', function() {
+										U.dialog();
+									});
+								}
+							})
+						});
+					}
+				});
+				break;
+			default:
+				// NO DEFAULT
+			}
+		}
+
+		/**
+		 * [동영상 Dialog]
+		 */
+		$('.show-video').on('click', function() {
+			U.dialog({
+				templateId: 'dialog-template-video'
+			});
+
+			return false;
+		});
+
+	});
+</script>
+
+</head>
+<body class="has-event">
+<header id="gnb-holder">
+	<div id="gnb">
+		<div class="menu-field h-bar">
+			<a class="logo h-item" href="home.html">Smart[Home]</a>
+			<ul class="menus h-item h-bar">
+				<li class="menu h-item"><a class="bt-products-and-services" href="products-and-services.html">제품 및 서비스</a></li>
+				<li class="menu h-item"><a class="bt-costumer-center" href="costumer-support.html">고객 지원</a></li>
+			</ul>
+		</div>
+		<div class="account-field">
+			<ul class="account-for-guest h-bar">
+				<li class="account h-item"><button type="button" class="bt-sign-up">회원가입</button></li>
+				<li class="account h-item"><button type="button" class="bt-log-in">로그인</button></li>
+			</ul>
+			<ul class="account-for-user h-bar">
+				<li class="account h-item"><a class="gnb-user-name" href="account.html">홍길동 님</a></li>
+				<li class="account h-item"><button type="button" class="bt-log-out">로그아웃</button></li>
+			</ul>
+		</div>
+	</div>
+</header>
+<nav id="pager">
+	<ul>
+		<li><a class="bt-pager bt-pager-intro" href="#intro">1</a></li>
+		<li><a class="bt-pager bt-pager-status" href="#status">2</a></li>
+		<li><a class="bt-pager bt-pager-mode" href="#mode">3</a></li>
+		<li><a class="bt-pager bt-pager-security" href="#security">4</a></li>
+	</ul>
+</nav>
+<div id="event-holder">
+	<div class="event-ribbon"></div>
+	<button class="bt-event-close">Close</button>
+	<!-- .event-description 및 .event-duration은 내용이 앞으로 달라질 수 있으므로
+		또다른 이벤트가 필요할 때를 대비하여 css를 손대지 않고
+		유지보수가 가능하도록 하기 위해 스타일을 직접 기술함 -->
+	<div class="event-description" style="position:absolute;top:50%;left:50%;margin:-125px 0 0 -104px;width:208px;height:250px;background:url(../img/ex-event-description.png) no-repeat;text-indent:200%;white-space:nowrap;overflow:hidden;">
+		<p>7일 체험권</p>
+		<p>지금 smart[Home] 앱을 다운 받으시는 분들께 한여하 7일 체험권을 드립니다.</p>
+	</div>
+	<div class="event-duration" style="background-image:url(../img/ex-event-duration.png);">
+		<p>06.01 ~ 07.31</p>
+	</div>
+</div>
+<div id="prologue">
+	<section id="intro" class="card">
+		<div class="holder">
+			<div class="central">
+				<div class="title-holder">
+					<h1 class="title">일상의 행복한 변화, 스마트홈이 도와드립니다.</h1>
+					<p class="text">
+						Smart[Home]은 집 안에서도, 집 박에서도 원하는 대로
+						집 안 환경을 조절할 수 있는 똑독한 서비스 입니다.
+					</p>
+				</div>
+				<a class="show-video" href="https://www.youtube.com/embed/QWNvC0GytDY?autoplay=1">영상으로 만나기</a>
+				<ul class="stores h-bar">
+					<li class="store h-item"><a class="bt-tstore" href="" target="_blank">TStore</a></li>
+					<li class="store h-item"><a class="bt-google-play" href="" target="_blank">Google Play</a></li>
+					<li class="store h-item"><a class="bt-app-store" href="" target="_blank">App Store</a></li>
+				</ul>
+			</div>
+		</div>
+		<a class="bt-next-roller" href="#status">Next</a>
+	</section>
+	<button id="bt-event-badge" type="button">Event</button>
+</div>
+<div id="main">
+	<section id="status" class="card">
+		<div class="background-holder">
+			<video id="video-background" muted>
+				<source src="../mv/bg-status.mp4" type="video/mp4">
+				HTML5 동영상 기능을 제공하지 않는 브라우저를 사용하고 계십니다.
+			</video>
+		</div>
+		<div class="phone-holder">
+			<div class="phone-screen">
+				<video id="video-status" class="video" muted>
+					<source src="../mv/vi-status.mp4" type="video/mp4">
+					HTML5 동영상 기능을 제공하지 않는 브라우저를 사용하고 계십니다.
+				</video>
+			</div>
+		</div>
+		<div class="holder">
+			<h1 class="title">당신이 어디에 있어도~ 스마트한 관리</h1>
+			<p class="text">
+				Smart[Home]을 통하여 집안 의 상태 및 제품의 동작 상태를 확인하세요.
+				제습기의 물관리, 도어락의 배터리 부족, 기기의 동작 오류까지
+				당신이 어디에 있더라도 집안 곳곳을 스마트하게 관리할 수 있습니다.
+			</p>
+		</div>
+	</section>
+	<section id="mode" class="card">
+		<div class="background-holder">
+			<div class="background background-2"></div>
+			<div class="background background-1"></div>
+			<div class="background background-0"></div>
+		</div>
+		<div class="phone-holder">
+			<div class="phone-screen">
+				<video id="video-mode" class="video" muted>
+					<source src="../mv/vi-mode.mp4" type="video/mp4">
+					HTML5 동영상 기능을 제공하지 않는 브라우저를 사용하고 계십니다.
+				</video>
+			</div>
+		</div>
+		<div class="holder">
+			<h1 class="title">모드로 손쉽게 만드는 집안 환경</h1>
+			<p class="text">
+				Smart[Home]의 모드를 사용하면, 집안의 여러 제품들을 원하는 상황에 맞게
+				손쉽게 작동할 수 있습니다. 외출, 귀가, 수면, 휴가 외에도 직접 사용할 모드를
+				집안 환경에 맞게 모드를 설정해보세요.
+				더욱더 쾌적한 집안 환경을 만들 수 있습니다.
+			</p>
+		</div>
+	</section>
+</div>
+<div id="epilogue">
+	<section id="security" class="card">
+		<div class="holder">
+			<ul class="central h-bar">
+				<li class="security-network h-item">
+					<h1 class="title">보안 네트워크</h1>
+					<p class="text">
+						보안 네트워크로 개인정보를 안전하게 보호합니다.
+						개인정보 노출에 걱정하지 마세요!
+					</p>
+				</li>
+				<li class="security-service h-item">
+					<h1 class="title">방범 서비스</h1>
+					<p class="text">
+						위급한 상황이나 긴급한 상황에 처해 있을 때엔
+						긴급상황을 알리미(SOS)를 사용하세요!
+						신속하게 긴급 메시지를 전달할 수 있습니다.
+					</p>
+				</li>
+			</ul>
+		</div>
+		<div class="store-holder h-bar">
+			<ul class="stores h-item h-bar">
+				<li class="store h-item"><a class="bt-tstore" href="" target="_blank">TStore</a></li>
+				<li class="store h-item"><a class="bt-google-play" href="" target="_blank">Google Play</a></li>
+				<li class="store h-item"><a class="bt-app-store" href="" target="_blank">App Store</a></li>
+			</ul>
+		</div>
+		<footer id="footer">
+			<div class="footer-field">
+				<ul class="footer-terms h-bar">
+					<li class="footer-term h-item"><a class="bt-term-service" href="terms-and-conditions.html" target="_blank">이용약관</a></li>
+					<li class="footer-term h-item"><a class="bt-term-privacy" href="privacy-policy.html" target="_blank">개인정보 취급방침</a></li>
+				</ul>
+			</div>
+			<div class="footer-field">
+				<ul class="infos">
+					<li class="info"><p>주소: 서울특별시 중구 을지로 65 (을지로 2가) <span>|</span> 대포이사/사장: 장동현 <span>|</span> 사업자 등록번호: 104-81-37225</p></li>
+					<li class="info"><p>고객센터: 1800-0161 <span>|</span> 이메일 문의: <a class="mail-to" href="mailto:smarthome@sk.com">smarthome@sk.com</a></p></li>
+				</ul>
+			</div>
+			<div class="copyright-holder">
+				<p class="copyright">Copyright SK Planet. All Rights Reservced.</p>
+			</div>
+		</footer>
+	</section>
+</div>
+</body>
+</html>
